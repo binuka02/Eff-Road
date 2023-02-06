@@ -1,11 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 const HomeScreen = () => {
     return (
         <SafeAreaView style={tw`bg-white h-full`}>
-        <Text style={[tw`text-red-500 p-10`,styles.header]}>HomeScreen</Text>
+            <View style={tw`p-5`}>
+                <Image style={{
+                    width:120,
+                    height:120,
+                    resizeMode:"contain",
+                }}
+                    source={{
+                        uri:"https://iili.io/H1tNIwv.jpg",
+                    }}
+                />
+            </View>
         </SafeAreaView>
     );
 };
