@@ -4,7 +4,8 @@ import tw from "tailwind-react-native-classnames";
 import { Icon } from "react-native-elements";
 import { useNavigation } from '@react-navigation/native';
 import RiderScreen from "../screens/RiderScreen";
-
+import { useSelector } from 'react-redux';
+import { selectDestination } from '../slices/navSlice';
 
 const pages = [
     {
@@ -25,6 +26,8 @@ const pages = [
 
 const NavOptions = () => {
     const navigation = useNavigation();
+    const destination = useSelector(selectDestination);
+
 
     return(
         <FlatList
@@ -34,8 +37,11 @@ const NavOptions = () => {
             renderItem={({item}) => (
                 <TouchableOpacity 
                 onPress={() => navigation.navigate(item.screen)}
-                style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}>
-                    <View>
+                style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}
+                // disabled={!destination}
+                >    
+                    <View style={tw`${!destination && "opacity-20"}`}>
+                    
                         <Image
                             source={{uri: item.image}}
                             style={{width:120, height:120, resizeMode:"contain"}}
