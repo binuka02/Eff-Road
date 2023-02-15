@@ -2,6 +2,10 @@ import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, TouchableOpacity } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { Icon } from "react-native-elements";
+import { useNavigation } from '@react-navigation/native';
+import RiderScreen from "../screens/RiderScreen";
+import { useSelector } from 'react-redux';
+import { selectDestination } from '../slices/navSlice';
 
 const pages = [
     {
@@ -21,14 +25,23 @@ const pages = [
 
 
 const NavOptions = () => {
+    const navigation = useNavigation();
+    const destination = useSelector(selectDestination);
+
+
     return(
         <FlatList
             data={pages}
             horizontal
             keyExtractor={(item) => item.id}
             renderItem={({item}) => (
-                <TouchableOpacity style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}>
-                    <View>
+                <TouchableOpacity 
+                onPress={() => navigation.navigate(item.screen)}
+                style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}
+                disabled={!destination}
+                >    
+                    <View style={tw`${!destination && "opacity-20"}`}>
+                    
                         <Image
                             source={{uri: item.image}}
                             style={{width:120, height:120, resizeMode:"contain"}}
