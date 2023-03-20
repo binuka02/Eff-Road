@@ -10,6 +10,8 @@ module.exports = function(api) {
           "path": ".env",
         },
       ],
+      ["tailwindcss-react-native/babel"],
+      ['react-native-reanimated/plugin'],
     ],
   };
 };

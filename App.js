@@ -2,7 +2,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Provider } from 'react-redux';
 import HomeScreen from './screens/HomeScreen';
 import RiderScreen from './screens/RiderScreen';
-import PassengerScreen from './screens/PassengerScreen';
+import ViewMap from './screens/ViewMap';
+import Login from './screens/Login';
+import Signup from './screens/Signup';
 import store from './store';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -28,8 +30,18 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="PassengerScreen"
-              component={PassengerScreen}
+              name="ViewMap"
+              component={ViewMap}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="Signup"
+              component={Signup}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

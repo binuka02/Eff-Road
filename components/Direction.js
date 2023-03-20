@@ -20,13 +20,24 @@ const Features = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
-        <Text style={tw`text-center py-2 text-xl`}>Good Morning, Binuka</Text>
+        <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, Binuka Silva!👋</Text>
         {/* <Text>{destination(0)}</Text> */}
         <View style={tw`border-t border-gray-200 flex-shrink`}>
           <View>
             <GooglePlacesAutocomplete
-              placeholder="Where From?"
-              styles={BoxStyle}
+              placeholder="Tell me where from"
+              styles={{
+                container:{
+                    flex:0,
+                    marginLeft:10,
+                    marginRight:10,
+                    marginTop:15,
+                },
+                textInput:{
+                    fontSize:18,
+                    textAlign:'center',
+                },
+            }}
               fetchDetails={true}
               returnKeyType={'search'}
               minLength={2}
@@ -49,11 +60,12 @@ const Features = () => {
               debounce={400}
             />
           </View>
-          <View style={[ButtonStyle.container]}>
+          {/* <View style={[ButtonStyle.container]}>
             <TouchableOpacity style={[tw`${!origin && "opacity-20"}`,ButtonStyle.button]}>
               <Text style={[ButtonStyle.text]}>Direction</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
+        
         </View>
     </SafeAreaView>
   )
@@ -70,7 +82,7 @@ const BoxStyle = StyleSheet.create({
       flex: 0,
     },
     textInput: {
-      backgroundColor: '#DDDDDF',
+      backgroundColor: '#ebebeb',
       borderRadius: 0,
       fontSize: 18,
     },
