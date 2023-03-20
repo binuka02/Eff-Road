@@ -50,6 +50,7 @@ const Maps = () => {
 
         {destination?.location && (
             <Marker
+                draggable
                 coordinate={{
                     latitude: destination.location.lat,
                     longitude: destination.location.lng,

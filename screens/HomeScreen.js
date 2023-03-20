@@ -76,16 +76,10 @@ const HomeScreen = () => {
                     source={require("./jeep.png")}
                     style={tw`w-80 h-80`}
                 />
-                {/* <View style={tw`absolute top-48 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-300 rounded-full items-center justify-center`}>
-                    <TouchableOpacity>
-                        <View style={tw`w-20 h-20 items-center justify-center rounded-full bg-blue-300`}>
-                            <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                </View> */}
+               
             </View>
             <NavOptions/>
+
             
             {/* <View style={tw`p-5`}>
                 <Image style={{
