@@ -101,17 +101,26 @@
 // export default App;
 
 
-import { StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
+// import { AlanView } from '@alan-ai/alan-sdk-react-native';
+import LandingBackground from '../components/authentication/LandingBackground';
+import { Button } from 'react-native-elements';
+import tw from 'tailwind-react-native-classnames';
+import Buttons from '../components/authentication/Buttons';
 
-const PassengerScreen = () => {
+const ViewMap = (nv) => {
   return (
-    <View>
-      <Text>PassengerScreen</Text>
-    </View>
+    <LandingBackground>
+      <View style={{marginVertical:50, textAlign:'center'}}>
+        <Text style={{color:'#090A2E', fontSize:64, }}>EffRoad</Text>
+        <Buttons txtcolor='white' bgcolor='black' btnlbl="Login" press={()=>nv.navigation.navigate("Login")}/>
+        <Buttons txtcolor='black' bgcolor='white' btnlbl="Signup"  press={()=>nv.navigation.navigate("Signup")}/>
+      </View>
+    </LandingBackground>
   )
 }
 
-export default PassengerScreen
+export default ViewMap
 
 const styles = StyleSheet.create({})

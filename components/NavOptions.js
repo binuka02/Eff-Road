@@ -10,17 +10,27 @@ import { selectDestination } from '../slices/navSlice';
 const pages = [
     {
         id: "123",
-        title: "Rider",
-        image: "https://links.papareact.com/3pn",
+        title: "Ride",
         screen: "RiderScreen",
     },
-    {
-        id: "456",
-        title: "Passenger",
-        image: "https://links.papareact.com/28w",
-        screen: "PassengerScreen",
-    },
+
 ];
+
+// const pages2 = [
+
+//     {
+//         id: "456",
+//         title: "ViewMap",
+//         image: "https://cdn-icons-png.flaticon.com/512/1865/1865269.png",
+//         screen: "ViewMap",
+//     },
+//     {
+//         id: "789",
+//         title: "Account",
+//         image: "https://cdn-icons-png.flaticon.com/512/61/61205.png",
+//         screen: "Account",
+//     },
+// ];
 
 
 
@@ -30,32 +40,80 @@ const NavOptions = () => {
 
 
     return(
-        <FlatList
-            data={pages}
-            horizontal
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-                <TouchableOpacity 
-                onPress={() => navigation.navigate(item.screen)}
-                style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}
-                disabled={!destination}
-                >    
-                    <View style={tw`${!destination && "opacity-20"}`}>
+       
+        //     <FlatList
+        //     data={pages}
+        //     horizontal
+        //     keyExtractor={(item) => item.id}
+        //     renderItem={({item}) => (
+        //         <TouchableOpacity 
+        //         onPress={() => navigation.navigate(item.screen)}
+        //         style={tw`p-2 pl-5 pb-12 pt-4 bg-gray-200 m-2 w-40 rounded-lg`}
+        //         disabled={!destination}
+        //         >    
+        //             <View style={tw`${!destination && "opacity-20"}`}>
                     
-                        <Image
-                            source={{uri: item.image}}
-                            style={{width:120, height:120, resizeMode:"contain"}}
-                        />
-                        <Text style={tw`mt-2 text-lg font-semibold`}>{item.title}</Text>
-                        <Icon 
-                            name="arrowright" 
-                            color="white" 
-                            type="antdesign"
-                            style={tw`p-2 bg-black rounded-full w-10 mt-4`}/>
-                    </View>
-                </TouchableOpacity>
-            )}
-        />
+        //                 <Image
+        //                     source={{uri: item.image}}
+        //                     style={{width:120, height:120, resizeMode:"contain"}}
+        //                 />
+        //                 <Text style={tw`mt-6 text-xl font-semibold text-center`}>{item.title}</Text>
+                        
+        //             </View>
+
+                   
+                
+        //         </TouchableOpacity>
+        //     )}
+        
+        // />
+        <View style={tw`absolute top-96 ml-32 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-300 rounded-full items-center justify-center inset-y-3/4`}>
+        {
+            pages.map((item,index) => {
+                return(
+                    <TouchableOpacity 
+                    key={index}
+                    onPress={() => navigation.navigate(item.screen)}
+                    // style={tw`p-2  pb-12 pt-4 bg-gray-200 m-2 w-48 rounded-lg`}
+                    style={tw`items-center`}
+                    // disabled={!destination}
+                    >    
+                    
+                        {/* <View style={tw`${!destination && "opacity-20"}`}> */}
+                        <View style={tw`w-20 h-20 items-center justify-center rounded-full bg-blue-200`}>
+                            <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>                
+                        </View>
+                    </TouchableOpacity>
+                )
+            })
+        }
+            {/* <View>
+            {
+                pages2.map((item,index) => {
+                    return(
+                        <TouchableOpacity 
+                        key={index}
+                        onPress={() => navigation.navigate(item.screen)}
+                        style={tw`p-2 pb-12 pt-10 bg-gray-200 m-2 w-36 h-36 rounded-lg `}
+                    
+                        >    
+                            <View>
+                            
+                                <Image
+                                    source={{uri: item.image}}
+                                    style={{width:80, height:60, resizeMode:"contain",alignSelf:'center',justifyContent:"center"} }
+                                />
+                                
+                            </View>
+
+                        
+                    
+                        </TouchableOpacity>
+                    )
+                })
+            }
+            </View> */}
+        </View>
     );
 };
 

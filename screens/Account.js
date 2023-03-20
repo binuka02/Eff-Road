@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const StartJourney = () => {
+const Account = () => {
   return (
     <View>
-      <Text>Not Done Yet</Text>
+      <Text>Account</Text>
     </View>
   )
 }
 
-export default StartJourney
+export default Account
 
 const styles = StyleSheet.create({})
