@@ -1,10 +1,11 @@
+//Correct
+
 // import React, { useState, useEffect } from 'react';
 // import { Platform, Text, View, StyleSheet } from 'react-native';
 // import * as Location from 'expo-location';
 // import MapView from 'react-native-maps';
 // import { Marker } from 'react-native-maps';
  
-
 // export default function App() {
 //   const [currentLocation, setCurrentLocation] = useState(null);
 
@@ -35,7 +36,7 @@
 // const styles = StyleSheet.create({}); 
 
 
-
+//////////////////
 
 
 // import React, { useState, useEffect } from 'react';
@@ -100,8 +101,10 @@
 
 // export default App;
 
+///////////////
 
-import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+
+import { ImageBackground, StyleSheet, Text, View, TouchableOpacity,Image,SafeAreaView } from 'react-native'
 import React from 'react'
 // import { AlanView } from '@alan-ai/alan-sdk-react-native';
 import LandingBackground from '../components/authentication/LandingBackground';
@@ -111,13 +114,52 @@ import Buttons from '../components/authentication/Buttons';
 
 const ViewMap = (nv) => {
   return (
-    <LandingBackground>
-      <View style={{marginVertical:50, textAlign:'center'}}>
-        <Text style={{color:'#090A2E', fontSize:64, }}>EffRoad</Text>
-        <Buttons txtcolor='white' bgcolor='black' btnlbl="Login" press={()=>nv.navigation.navigate("Login")}/>
-        <Buttons txtcolor='black' bgcolor='white' btnlbl="Signup"  press={()=>nv.navigation.navigate("Signup")}/>
-      </View>
-    </LandingBackground>
+    // <LandingBackground>
+    //   <View style={{marginVertical:50, textAlign:'center'}}>
+    //     <Text style={{color:'#090A2E', fontSize:64, }}>EffRoad</Text>
+    //     <Buttons txtcolor='white' bgcolor='black' btnlbl="Login" press={()=>nv.navigation.navigate("Login")}/>
+    //     <Buttons txtcolor='black' bgcolor='white' btnlbl="Signup"  press={()=>nv.navigation.navigate("Signup")}/>
+    //   </View>
+    // </LandingBackground>
+    <SafeAreaView>
+
+          <View style={tw`flex-row px-6 mt-10 items-center`}>
+                <View style={tw`w-16 h-16 bg-black rounded-full items-center justify-center`}>
+                    <Text style={tw`text-blue-300 text-4xl font-semibold`}>Eff</Text>
+                </View>
+                
+                    <Text style={tw`text-black text-3xl font-semibold`}>Road</Text>
+                
+            </View>
+
+            <View style={tw`px-6 mt-10`}>
+                <Text style={tw`text-black text-4xl font-bold`}>Simplify your journey</Text>
+                
+                {/* <Text style={tw`text-lg mt-5 font-bold`}>Welcome</Text> */}
+                <Text>The smarter way to navigate. Our app offers real-time updates, turn-by-turn directions, and a range of features to help you get to your destination with ease. With our customizable map views, voice-activated commands, and hands-free operation, you can focus on the road ahead and leave the rest to us.</Text>
+            </View>
+
+          <View style={tw` w-64 h-64 bg-blue-300 rounded-full absolute top-52 -right-28 opacity-50`}></View>
+            <View style={tw`w-64 h-64 bg-red-300 rounded-full absolute top-80 -left-20 opacity-50`}></View>
+
+            <View style={tw` mx-auto relative items-center justify-center top-4`}>
+                <Image
+                // animation="fadeIn"
+                // easing="ease-out"
+                    source={require("./frontjeep.png")}
+                    style={tw`w-96 h-72`}
+                />
+            <TouchableOpacity
+            onPress={()=>nv.navigation.navigate("Login")}
+            >
+            <View style={tw`w-52 h-10 items-center justify-center bg-black mt-16 shadow-2xl rounded-lg`}>
+             <Text style={tw`text-gray-50 text-xl font-semibold `}>Log in to EffRoad</Text>                
+            </View>
+            </TouchableOpacity>
+            
+          </View>
+          
+    </SafeAreaView>
   )
 }
 

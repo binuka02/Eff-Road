@@ -23,7 +23,7 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   //Screen names
 const homeName = "Home";
-const ViewMap1 = "ViewMap";
+const ViewMap1 = "Map";
 const Account1 = "Account";
 
 const Tab = createBottomTabNavigator();
@@ -34,6 +34,12 @@ const Tab = createBottomTabNavigator();
         initialRouteName={homeName}
         screenOptions={({ route }) => ({
           headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#18181a',
+            position: 'absolute',
+            paddingBottom: 5,
+            paddingTop: 5,
+        },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             let rn = route.name;
@@ -42,10 +48,10 @@ const Tab = createBottomTabNavigator();
               iconName = focused ? 'home' : 'home-outline';
 
             } else if (rn === ViewMap1) {
-              iconName = focused ? 'list' : 'list-outline';
+              iconName = focused ? 'map' : 'map-outline';
 
             } else if (rn === Account1) {
-              iconName = focused ? 'settings' : 'settings-outline';
+              iconName = focused ? 'person-circle' : 'person-circle-outline';
             }
 
             // You can return any component that you like here!

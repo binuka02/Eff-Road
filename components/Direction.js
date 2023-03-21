@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity,Image } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from 'tailwind-react-native-classnames'
@@ -65,54 +65,62 @@ const Features = () => {
               <Text style={[ButtonStyle.text]}>Direction</Text>
             </TouchableOpacity>
           </View> */}
+
+
         
         </View>
+
+        
+
+        
+
     </SafeAreaView>
   )
 }
 
-
 export default Features
 
-const BoxStyle = StyleSheet.create({
-    container: {
-      paddingTop: 10,
-      backgroundColor: 'white',
-      paddingTop: 20,
-      flex: 0,
-    },
-    textInput: {
-      backgroundColor: '#ebebeb',
-      borderRadius: 0,
-      fontSize: 18,
-    },
-    textInputContainer: {
-      paddingHorizontal: 20,
-      paddingBottom: 0,
-    },
-  })
+
+// const BoxStyle = StyleSheet.create({
+//     container: {
+//       paddingTop: 10,
+//       backgroundColor: 'white',
+//       paddingTop: 20,
+//       flex: 0,
+//     },
+//     textInput: {
+//       backgroundColor: '#ebebeb',
+//       borderRadius: 0,
+//       fontSize: 18,
+//     },
+//     textInputContainer: {
+//       paddingHorizontal: 20,
+//       paddingBottom: 0,
+//     },
+//   })
 
 
-  const ButtonStyle = StyleSheet.create({
-    container: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    button: {
-      marginTop: 20,
-      width: 130,
-      height: 40,
-      borderRadius: 15,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 2,
-      borderColor: '#090A2E',
-      opacity: 0.95,
-      backgroundColor: '#090A2E'
-    },
-    text: {
-      fontSize: 17,
-      color: 'white',
-      fontWeight: 'bold',
-    },
-  });
+//   const ButtonStyle = StyleSheet.create({
+//     container: {
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//     },
+//     button: {
+//       marginTop: 20,
+//       width: 130,
+//       height: 40,
+//       borderRadius: 15,
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//       borderWidth: 2,
+//       borderColor: '#090A2E',
+//       opacity: 0.95,
+//       backgroundColor: '#090A2E'
+//     },
+//     text: {
+//       fontSize: 17,
+//       color: 'white',
+//       fontWeight: 'bold',
+//     },
+//   });
+

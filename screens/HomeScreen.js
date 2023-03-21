@@ -38,6 +38,7 @@ const HomeScreen = () => {
                             flex:0,
                             marginLeft:13,
                             marginTop:15,
+                            zIndex:49,
                         },
                         textInput:{
                             fontSize:18,
@@ -66,7 +67,7 @@ const HomeScreen = () => {
                 />
             </View>
 
-            <View style={tw` w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
+            <View style={tw`z-50 opacity-50 w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
             <View style={tw`w-72 h-72 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View>
 
             <View style={tw` relative items-center justify-center top-16`}>
