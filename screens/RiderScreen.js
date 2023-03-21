@@ -5,6 +5,7 @@ import Maps from '../components/Maps';
 import {createStackNavigator} from '@react-navigation/stack';
 import Direction from '../components/Direction';
 import Start from '../components/StartJourney';
+import Features from '../components/Features';
 
 const RiderScreen = () => {
 
@@ -12,10 +13,10 @@ const RiderScreen = () => {
   return (
  
     <View>
-        <View style={tw`h-1/2`}>
+        <View style={tw`h-2/3`}>
             <Maps/>
         </View>
-        <View style={tw`h-1/2`}>
+        <View style={tw`h-1/3`}>
             <Stack.Navigator>
                 <Stack.Screen
                     name="Direction"
@@ -27,6 +28,14 @@ const RiderScreen = () => {
                 <Stack.Screen
                     name="Start"
                     component={Start}
+                    options={{ 
+                        headerShown: false
+                    }}
+                />
+
+                <Stack.Screen
+                    name="Features"
+                    component={Features}
                     options={{ 
                         headerShown: false
                     }}

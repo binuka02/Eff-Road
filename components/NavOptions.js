@@ -67,13 +67,11 @@ const NavOptions = () => {
         //     )}
         
         // />
-        <View style={tw`absolute top-96 ml-32 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-300 rounded-full items-center justify-center inset-y-3/4`}>
-        {
-            pages.map((item,index) => {
-                return(
+        <View style={tw`relative mx-auto bottom-12 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-300 rounded-full items-center justify-center `}>
+        
                     <TouchableOpacity 
-                    key={index}
-                    onPress={() => navigation.navigate(item.screen)}
+                    
+                    onPress={() => navigation.navigate("RiderScreen")}
                     // style={tw`p-2  pb-12 pt-4 bg-gray-200 m-2 w-48 rounded-lg`}
                     style={tw`items-center`}
                     // disabled={!destination}
@@ -84,9 +82,8 @@ const NavOptions = () => {
                             <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>                
                         </View>
                     </TouchableOpacity>
-                )
-            })
-        }
+                
+            
             {/* <View>
             {
                 pages2.map((item,index) => {

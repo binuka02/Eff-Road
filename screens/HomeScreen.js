@@ -38,6 +38,7 @@ const HomeScreen = () => {
                             flex:0,
                             marginLeft:13,
                             marginTop:15,
+                            zIndex:49,
                         },
                         textInput:{
                             fontSize:18,
@@ -66,7 +67,7 @@ const HomeScreen = () => {
                 />
             </View>
 
-            <View style={tw` w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
+            <View style={tw`z-50 opacity-50 w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
             <View style={tw`w-72 h-72 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View>
 
             <View style={tw` relative items-center justify-center top-16`}>
@@ -76,16 +77,10 @@ const HomeScreen = () => {
                     source={require("./jeep.png")}
                     style={tw`w-80 h-80`}
                 />
-                {/* <View style={tw`absolute top-48 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-300 rounded-full items-center justify-center`}>
-                    <TouchableOpacity>
-                        <View style={tw`w-20 h-20 items-center justify-center rounded-full bg-blue-300`}>
-                            <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                </View> */}
+               
             </View>
             <NavOptions/>
+
             
             {/* <View style={tw`p-5`}>
                 <Image style={{
