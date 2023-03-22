@@ -10,7 +10,7 @@ import { selectOrigin, selectDestination } from '../slices/navSlice'
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 
-const Features = () => {
+const Direction = () => {
 
 
 
@@ -78,7 +78,7 @@ const Features = () => {
   )
 }
 
-export default Features
+export default Direction
 
 
 // const BoxStyle = StyleSheet.create({

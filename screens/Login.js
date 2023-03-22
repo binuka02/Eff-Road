@@ -38,10 +38,7 @@ const Login = (nv) => {
           }}>
           Login to your account
         </Text>
-        <Field
-          placeholder="Email / Username"
-          keyboardType={'email-address'}
-        />
+        <Field placeholder="Username"/>
         <Field placeholder="Password" secureTextEntry={true} />
         <View
           style={{alignItems: 'flex-end', width: '78%', paddingRight: 16, marginBottom: 200}}>

@@ -9,8 +9,25 @@ import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useRef } from 'react';
 import { useState, useEffect } from 'react';
+import { mapRegion} from '../components/Features';
+import {socket } from '../socket';  
+import axios from 'axios';
+import { API_URL } from '@env';
 
-const carImage = require('./car-icon.jpg');
+const carImage = require('../assets/car-icon.jpg');
+const destinationImage = require('../assets/destination.png');
+const originImage = require('../assets/origin.png');
+
+const mapImages ={
+    Police : require('../assets/featureImages/police.png'),
+    Emergency : require('../assets/featureImages/emergency.png'),
+    Accident : require('../assets/featureImages/accident.png'),
+    RoadClosure : require('../assets/featureImages/road-closure.png'),
+    Traffic : require('../assets/featureImages/traffic.png'),
+    RoadsideHelp : require('../assets/featureImages/roadside-help.png'),
+}
+
+
 
 // const [distanceDuration, setDistanceDuration] = useState({});
 
@@ -18,20 +35,55 @@ const Maps = () => {
     const destination = useSelector(selectDestination);
     const origin = useSelector(selectOrigin);
     const mapRef = useRef(null);
+    const [featureLocations,setFeatureLocations] = useState([]);
 
     useEffect(()=>{
         if(!origin || !destination) return;
 
         mapRef.current.fitToSuppliedMarkers(['Origin', 'Destination'], {
-            edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+            edgePadding: { top: 150, right: 150, bottom: 150, left: 150 },
         });
     }, [origin, destination])
 
     //Correct//
 
+
+
     React.useEffect(() => {
         getLocationPermission();
+        getFeatureLocations()
+        socket.on("locationAdded",(data)=>{
+            console.log(data)
+            const newLocations = featureLocations || [];
+            const newData = {
+                lat: data.lat,
+                lng: data.lng,
+                feature: data.feature
+            }
+            newLocations.push(newData); //rwact useState not working
+            console.log(newLocations)
+            setFeatureLocations(newLocations);
+        })
+        socket.on("clearLocations",()=>{
+           setFeatureLocations([]);
+        })
+        
+        // return () => {
+        //     socket.off("locationAdded");
+        //     socket.off("clearLocations");
+        // }
     }, []);
+
+    useEffect(() => {
+        console.log("location",featureLocations);
+    }, [featureLocations]);
+
+    async function getFeatureLocations(){
+        const response = await axios.get(`${API_URL}/location`);
+       
+        setFeatureLocations(response.data);
+
+    }
 
     async function getLocationPermission(){
         let {status} = await Location.requestForegroundPermissionsAsync();
@@ -83,8 +135,8 @@ const Maps = () => {
             // longitude: 79.8855,
             latitude: destination.location.lat,
             longitude: destination.location.lng,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
         }}
     >
         {origin && destination && (
@@ -94,6 +146,7 @@ const Maps = () => {
                 apikey={GOOGLE_MAPS_APIKEY}
                 strokeWidth={5}
                 strokeColor="black"
+
                 // onReady={result => {
                 //     setDistanceDuration({
                 //       distance: result.distance,
@@ -116,12 +169,15 @@ const Maps = () => {
                 title="Destination"
                 description={destination.description}
                 identifier="Destination"
-            />
+            >
+            <Image source={destinationImage} style={{height: 50, width: 50}}/>
+            </Marker>
         )}
+
+        
 
         {origin?.location && (
             <Marker
-                image={carImage}
                 coordinate={{
                     latitude: origin.location.lat,
                     longitude: origin.location.lng,
@@ -129,8 +185,53 @@ const Maps = () => {
                 title="Origin"
                 description={origin.description}
                 identifier="Origin"
-            />
+            >
+                <Image source={originImage} style={{height: 50, width: 50}}/>
+            </Marker>
         )}
+
+        {featureLocations.map((location,index) => {
+            console.log('====================================');
+            console.log(location.feature);
+            const feature = location.feature
+            let image=""
+            if(feature === "Accident"){
+                image = mapImages.Accident
+            }
+            else if(feature === "Police"){
+                image = mapImages.Police
+            }
+            else if(feature === "Emergency"){
+                image = mapImages.Emergency
+            }
+            else if(feature === "RoadsideHelp"){
+                image = mapImages.RoadsideHelp
+            }
+            else if(feature === "RoadClosure"){
+                image = mapImages.RoadClosure
+            }
+            else if(feature === "Traffic"){
+                image = mapImages.Traffic
+            }
+            console.log('====================================');
+            return (
+                <Marker
+                    identifier={location.feature}
+                    key={index}
+                    coordinate={{
+                        latitude:parseFloat(location.lat),
+                        longitude:parseFloat(location.lng),
+                    }}
+                    title={location.feature}>
+                    <Image source={image} style={{width: 40, height: 40}}/>
+                    </Marker>
+                    
+                
+            )
+        })}
+
+
+        
 
         
     </MapView>

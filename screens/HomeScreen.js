@@ -38,7 +38,7 @@ const HomeScreen = () => {
                             flex:0,
                             marginLeft:13,
                             marginTop:15,
-                            zIndex:49,
+                            zIndex:39,
                         },
                         textInput:{
                             fontSize:18,
@@ -67,15 +67,15 @@ const HomeScreen = () => {
                 />
             </View>
 
-            <View style={tw`z-50 opacity-50 w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
-            <View style={tw`w-72 h-72 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View>
+            <View style={tw`z-40 opacity-60 w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
+            <View style={tw`w-72 h-72 opacity-60 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View>
 
-            <View style={tw` relative items-center justify-center top-16`}>
+            <View style={tw`z-50 relative items-center justify-center top-16`}>
                 <Image
                 // animation="fadeIn"
                 // easing="ease-out"
-                    source={require("./jeep.png")}
-                    style={tw`w-80 h-80`}
+                    source={require("../assets/jeep.png")}
+                    style={tw`w-96 h-96`}
                 />
                
             </View>

@@ -40,15 +40,14 @@ const Signup = props => {
           }}>
           Create a new account
         </Text>
+
           <Field placeholder="First Name" />
           <Field placeholder="Last Name" />
-          <Field
-            placeholder="Email / Username"
-            keyboardType={'email-address'}
-          />
-          <Field placeholder="Contact Number" keyboardType={'number'} />
+          <Field placeholder="Username" />
+          <Field placeholder="Email" keyboardType={'email-address'}/>
           <Field placeholder="Password" secureTextEntry={true} />
           <Field placeholder="Confirm Password" secureTextEntry={true} />
+
           <View
             style={{
               display: 'flex',

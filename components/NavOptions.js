@@ -67,19 +67,19 @@ const NavOptions = () => {
         //     )}
         
         // />
-        <View style={tw`relative mx-auto bottom-12 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-300 rounded-full items-center justify-center `}>
+        <View style={tw`z-50 relative mx-auto bottom-20 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-500 rounded-full items-center justify-center `}>
         
                     <TouchableOpacity 
                     
                     onPress={() => navigation.navigate("RiderScreen")}
                     // style={tw`p-2  pb-12 pt-4 bg-gray-200 m-2 w-48 rounded-lg`}
-                    style={tw`items-center`}
+                    style={tw`items-center `}
                     // disabled={!destination}
                     >    
                     
                         {/* <View style={tw`${!destination && "opacity-20"}`}> */}
-                        <View style={tw`w-20 h-20 items-center justify-center rounded-full bg-blue-200`}>
-                            <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>                
+                        <View style={tw` w-20 h-20 items-center justify-center rounded-full bg-blue-500 shadow-2xl`}>
+                            <Text style={tw`text-gray-200 text-4xl font-semibold shadow-2xl`}>Go</Text>                
                         </View>
                     </TouchableOpacity>
                 
