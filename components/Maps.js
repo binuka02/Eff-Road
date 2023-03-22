@@ -15,12 +15,16 @@ import axios from 'axios';
 import { API_URL } from '@env';
 
 const carImage = require('../assets/car-icon.jpg');
+const destinationImage = require('../assets/destination.png');
+const originImage = require('../assets/origin.png');
 
 const mapImages ={
-    Accident : require('../assets/featureImages/accident.png'),
     Police : require('../assets/featureImages/police.png'),
-
-
+    Emergency : require('../assets/featureImages/emergency.png'),
+    Accident : require('../assets/featureImages/accident.png'),
+    RoadClosure : require('../assets/featureImages/road-closure.png'),
+    Traffic : require('../assets/featureImages/traffic.png'),
+    RoadsideHelp : require('../assets/featureImages/roadside-help.png'),
 }
 
 
@@ -165,14 +169,15 @@ const Maps = () => {
                 title="Destination"
                 description={destination.description}
                 identifier="Destination"
-            />
+            >
+            <Image source={destinationImage} style={{height: 50, width: 50}}/>
+            </Marker>
         )}
 
         
 
         {origin?.location && (
             <Marker
-                image={carImage}
                 coordinate={{
                     latitude: origin.location.lat,
                     longitude: origin.location.lng,
@@ -180,7 +185,9 @@ const Maps = () => {
                 title="Origin"
                 description={origin.description}
                 identifier="Origin"
-            />
+            >
+                <Image source={originImage} style={{height: 50, width: 50}}/>
+            </Marker>
         )}
 
         {featureLocations.map((location,index) => {
@@ -194,20 +201,32 @@ const Maps = () => {
             else if(feature === "Police"){
                 image = mapImages.Police
             }
+            else if(feature === "Emergency"){
+                image = mapImages.Emergency
+            }
+            else if(feature === "RoadsideHelp"){
+                image = mapImages.RoadsideHelp
+            }
+            else if(feature === "RoadClosure"){
+                image = mapImages.RoadClosure
+            }
+            else if(feature === "Traffic"){
+                image = mapImages.Traffic
+            }
             console.log('====================================');
             return (
                 <Marker
-                image={image}
                     identifier={location.feature}
-
                     key={index}
                     coordinate={{
                         latitude:parseFloat(location.lat),
                         longitude:parseFloat(location.lng),
                     }}
-                    title={location.feature}
-                   
-                />
+                    title={location.feature}>
+                    <Image source={image} style={{width: 40, height: 40}}/>
+                    </Marker>
+                    
+                
             )
         })}
 

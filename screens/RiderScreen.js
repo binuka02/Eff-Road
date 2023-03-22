@@ -16,7 +16,7 @@ const RiderScreen = () => {
         <View style={tw`h-2/3`}>
             <Maps/>
         </View>
-        <View style={tw`h-1/3`}>
+        <View style={tw`h-1/3 rounded-2xl`}>
             <Stack.Navigator>
                 <Stack.Screen
                     name="Direction"

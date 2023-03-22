@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, Dimensions, Button } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Button,TouchableOpacity,Image } from 'react-native'
 import React from 'react'
 import MapView, {Marker} from 'react-native-maps';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios'
-import { API_URL } from '@env';  
+import { API_URL } from '@env'; 
+import tw from 'tailwind-react-native-classnames';
+
 
 const Features = () => {
 
@@ -55,17 +57,123 @@ await axios.post(API_URL+"/location",{
         </MapView> */}
 
         
-                    {/* <TouchableOpacity 
-                    
-                    onPress={() => navigation.navigate("RiderScreen")}
-                    style={tw`items-center `}
+        
+
+        {/* <Button title="Police"  onPress={()=>userLocation("Police")} /> */}
+        {/* <Button title="Accident" onPress={()=>userLocation("Accident")} /> */}
+
+        <Text style={tw`mt-6 font-bold text-lg`}>Let Other's Know..</Text>
+
+
+        <View style={styles.boxContain}>
+            <View style={styles.box}>
+                <View style={styles.inner}>
+                    <TouchableOpacity 
+                        onPress={()=>userLocation("Police")}
+                        title="Police"
+                        style={tw`items-center `}
                     >    
-                            <View style={tw` w-20 h-20 items-center justify-center rounded-full bg-blue-200`}>
-                            <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>                
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                            <Image 
+                                source={require("../assets/featureImages/police.png")}
+                                style={tw`w-10 h-10`}
+                            />
                         </View>
-                    </TouchableOpacity> */}
-        <Button title="Police"  onPress={()=>userLocation("Police")} />
-        <Button title="Accident" onPress={()=>userLocation("Accident")} />
+                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Police Inspector</Text>
+
+                    </TouchableOpacity>            
+                </View>
+            </View>
+            <View style={styles.box}>
+                <View style={styles.inner}>
+                    <TouchableOpacity 
+                        onPress={()=>userLocation("Emergency")}
+                        title="Emergency"
+                        style={tw`items-center `}
+                    >    
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-red-100 `}>
+                            <Image 
+                                source={require("../assets/featureImages/emergency.png")}
+                                style={tw`w-10 h-10`}
+                            />
+                        </View>
+                        <Text style={tw`text-sm items-center justify-center font-semibold text-red-600`}>Emergency</Text>
+
+                    </TouchableOpacity>            
+                </View>
+            </View>
+            <View style={styles.box}>
+                <View style={styles.inner}>
+                    <TouchableOpacity 
+                        onPress={()=>userLocation("Accident")}
+                        title="Accident"
+                        style={tw`items-center `}
+                    >    
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                            <Image 
+                                source={require("../assets/featureImages/accident.png")}
+                                style={tw`w-12 h-12`}
+                            />
+                        </View>
+                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Accident</Text>
+
+                    </TouchableOpacity>            
+                </View>
+            </View>
+            <View style={styles.box}>
+                <View style={styles.inner}>
+                    <TouchableOpacity 
+                        onPress={()=>userLocation("RoadClosure")}
+                        title="RoadClosure"
+                        style={tw`items-center `}
+                    >    
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                            <Image 
+                                source={require("../assets/featureImages/road-closure.png")}
+                                style={tw`w-10 h-10`}
+                            />
+                        </View>
+                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Road Closure</Text>
+
+                    </TouchableOpacity>            
+                </View>
+            </View><View style={styles.box}>
+                <View style={styles.inner}>
+                    <TouchableOpacity 
+                        onPress={()=>userLocation("Traffic")}
+                        title="Traffic"
+                        style={tw`items-center `}
+                    >    
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                            <Image 
+                                source={require("../assets/featureImages/traffic.png")}
+                                style={tw`w-12 h-12`}
+                            />
+                        </View>
+                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Traffic</Text>
+
+                    </TouchableOpacity>            
+                </View>
+            </View><View style={styles.box}>
+                <View style={styles.inner}>
+                    <TouchableOpacity 
+                        onPress={()=>userLocation("RoadsideHelp")}
+                        title="RoadsideHelp"
+                        style={tw`items-center `}
+                    >    
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200`}>
+                            <Image 
+                                source={require("../assets/featureImages/roadside-help.png")}
+                                style={tw`w-10 h-10`}
+                            />
+                        </View>
+                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Roadside Help</Text>
+
+                    </TouchableOpacity>            
+                </View>
+            </View>
+          
+        </View>
     </View>
 
   )
@@ -73,17 +181,38 @@ await axios.post(API_URL+"/location",{
 
 export default Features
 
+
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    map: {
-        width: Dimensions.get('window').width,
-        // height: Dimensions.get('window').height,
-        height: 150,
+    
+    boxContain: {
+       width: '80%',
+       height: '85%',
+       backgroundColor: 'white',
+       flexDirection: 'row',
+       flexWrap: 'wrap',
+       marginTop: 5,
     },
-})
 
+    box: {
+      width: '33.33%',
+      height: '40%',
+      backgroundColor: 'white',
+      marginTop: 10,
+   },
+  
+   inner:{
+     flex:1,
+     backgroundColor: 'white',
+     justifyContent: 'center', 
+     alignItems: 'center', 
+   } ,
+
+  
+   });
