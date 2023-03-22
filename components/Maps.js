@@ -9,6 +9,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useRef } from 'react';
 import { useState, useEffect } from 'react';
+import { mapRegion} from '../components/Features';
 
 const carImage = require('./car-icon.jpg');
 
@@ -131,6 +132,8 @@ const Maps = () => {
                 identifier="Origin"
             />
         )}
+
+        
 
         
     </MapView>

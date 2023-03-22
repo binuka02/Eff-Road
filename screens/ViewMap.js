@@ -139,23 +139,24 @@ const ViewMap = (nv) => {
                 <Text>The smarter way to navigate. Our app offers real-time updates, turn-by-turn directions, and a range of features to help you get to your destination with ease. With our customizable map views, voice-activated commands, and hands-free operation, you can focus on the road ahead and leave the rest to us.</Text>
             </View>
 
-          <View style={tw` w-64 h-64 bg-blue-300 rounded-full absolute top-52 -right-28 opacity-50`}></View>
-            <View style={tw`w-64 h-64 bg-red-300 rounded-full absolute top-80 -left-20 opacity-50`}></View>
-
-            <View style={tw` mx-auto relative items-center justify-center top-4`}>
-                <Image
-                // animation="fadeIn"
-                // easing="ease-out"
-                    source={require("./frontjeep.png")}
-                    style={tw`w-96 h-72`}
-                />
-            <TouchableOpacity
+          {/* <View style={tw` w-64 h-64 bg-blue-300 rounded-full absolute top-52 -right-28 opacity-50`}></View>
+            <View style={tw`w-64 h-64 bg-red-300 rounded-full absolute top-80 -left-20 opacity-50`}></View> */}
+<TouchableOpacity
             onPress={()=>nv.navigation.navigate("Login")}
             >
-            <View style={tw`w-52 h-10 items-center justify-center bg-black mt-16 shadow-2xl rounded-lg`}>
+            <View style={tw`mx-auto w-52 h-10 items-center justify-center bg-black mt-8 shadow-2xl rounded-lg`}>
              <Text style={tw`text-gray-50 text-xl font-semibold `}>Log in to EffRoad</Text>                
             </View>
             </TouchableOpacity>
+            <View style={tw` mx-auto relative items-center justify-center mt-16`}>
+            
+                <Image
+                // animation="fadeIn"
+                // easing="ease-out"
+                    source={require("./frontmap.png")}
+                    style={tw`w-96 h-72`}
+                />
+            
             
           </View>
           
