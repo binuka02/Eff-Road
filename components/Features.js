@@ -3,9 +3,11 @@ import React from 'react'
 import MapView, {Marker} from 'react-native-maps';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
-
+import axios from 'axios'
+import { API_URL } from '@env';  
 
 const Features = () => {
+
 
     const [mapRegion, setMapRegion] = useState({
         latitude: 6.8649,
@@ -20,60 +22,50 @@ const Features = () => {
         setMapLoaded(true);
     };
     
-  const userLocation = async () => {
+  const userLocation = async (feature) => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
     }
     const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
-
-    if(mapLoaded){
-    setMapRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    });
+await axios.post(API_URL+"/location",{
+    lat: location.coords.latitude,
+    lng: location.coords.longitude,
+    feature
+})
+    // if(mapLoaded){
+    // setMapRegion({
+    //     latitude: location.coords.latitude,
+    //     longitude: location.coords.longitude,
+    //     latitudeDelta: 0.0922,
+    //     longitudeDelta: 0.0421,
+    // });
+    // }
+    // console.log(location.coords.latitude, location.coords.longitude);
     }
-    console.log(location.coords.latitude, location.coords.longitude);
-    }
 
-    const kohuwalaLocation = async () => {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-        }
-        const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
     
-        if(mapLoaded){
-        setMapRegion({
-            latitude: 6.8301,
-            longitude: 79.8801,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-            
-        });
-        console.log("6.8301, 79.8801");
-        }
-        
-        }
-
-    useEffect(() => {
-        userLocation();
-        kohuwalaLocation();
-    }, [])
-
   return (
     <View style={styles.container}>
-        <MapView style={styles.map}
+        {/* <MapView style={styles.map}
         region={mapRegion}
         onLayout={handleMapLayout}>
             <Marker coordinate={mapRegion} />
-        </MapView>
-        <Button title="Get Current Location" onPress={userLocation} />
-        <Button title="Kohuwala" onPress={kohuwalaLocation} />
+        </MapView> */}
+
+        
+                    {/* <TouchableOpacity 
+                    
+                    onPress={() => navigation.navigate("RiderScreen")}
+                    style={tw`items-center `}
+                    >    
+                            <View style={tw` w-20 h-20 items-center justify-center rounded-full bg-blue-200`}>
+                            <Text style={tw`text-gray-50 text-4xl font-semibold`}>Go</Text>                
+                        </View>
+                    </TouchableOpacity> */}
+        <Button title="Police"  onPress={()=>userLocation("Police")} />
+        <Button title="Accident" onPress={()=>userLocation("Accident")} />
     </View>
 
   )

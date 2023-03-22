@@ -45,7 +45,6 @@ const Signup = props => {
           <Field placeholder="Last Name" />
           <Field placeholder="Username" />
           <Field placeholder="Email" keyboardType={'email-address'}/>
-          <Field placeholder="Contact Number" keyboardType={'number'} />
           <Field placeholder="Password" secureTextEntry={true} />
           <Field placeholder="Confirm Password" secureTextEntry={true} />
 
