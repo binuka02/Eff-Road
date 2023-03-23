@@ -49,24 +49,37 @@ const Maps = () => {
 
 
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         getLocationPermission();
         getFeatureLocations()
         socket.on("locationAdded",(data)=>{
             console.log(data)
+            console.log("socket new data feature locations",featureLocations);
             const newLocations = featureLocations || [];
             const newData = {
+                id: data.id,
                 lat: data.lat,
                 lng: data.lng,
                 feature: data.feature
             }
             newLocations.push(newData); //rwact useState not working
             console.log("socket new locations",newLocations)
+            setFeatureLocations([]);
             setFeatureLocations([...newLocations]);
         })
-        socket.on("clearLocations",()=>{
-           setFeatureLocations([]);
+        socket.on("clearLocations",({id})=>{
+        //    setFeatureLocations([]);
+        // console.log(id);
+        // const locations = featureLocations.filter((location)=>{
+        //     console.log("location id",location.id===id);
+        //     return location.id !== id
+        // });
+        // // console.log("newLocations after delete",locations);
+        // setFeatureLocations(locations);
+        // })
+        getFeatureLocations();
         })
+
         
         // return () => {
         //     socket.off("locationAdded");
@@ -80,7 +93,7 @@ const Maps = () => {
 
     async function getFeatureLocations(){
         const response = await axios.get(`${API_URL}/location`);
-       
+       setFeatureLocations([])
         setFeatureLocations(response.data);
 
     }

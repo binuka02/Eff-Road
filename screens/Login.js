@@ -3,8 +3,36 @@ import React from 'react'
 import LandingBackground from '../components/authentication/LandingBackground'
 import Buttons from '../components/authentication/Buttons';
 import Field from '../components/authentication/Field';
+import axios from 'axios'
+import {API_URL} from '@env'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (nv) => {
+
+  const [state,setState] = React.useState({
+email: "",
+password: ""
+  })
+
+  const loginUser = async () => {
+    try {
+      const response = await axios.post(API_URL+"/auth/login",{
+        email: state.email,
+        password: state.password
+      })
+
+
+      console.log(response.data);
+      const user = response.data
+      AsyncStorage.setItem('user', JSON.stringify(user))
+      nv.navigation.navigate("HomeScreen")
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+
+  }
   return (
     <LandingBackground>
     <View style={{alignItems: 'center', width: 460}}>
@@ -38,15 +66,19 @@ const Login = (nv) => {
           }}>
           Login to your account
         </Text>
-        <Field placeholder="Username"/>
-        <Field placeholder="Password" secureTextEntry={true} />
+        <Field placeholder="Email" value={state.email} onChangeText={(value)=>{
+          setState({...state, email: value})
+        }}/>
+        <Field placeholder="Password" secureTextEntry={true} value={state.password} onChangeText={(value)=>{
+          setState({...state, password: value})
+        }} />
         <View
           style={{alignItems: 'flex-end', width: '78%', paddingRight: 16, marginBottom: 200}}>
           <Text style={{color: '#090A2E', fontWeight: 'bold', fontSize: 16}}>
             Forgot Password ?
           </Text>
         </View>
-        <Buttons textColor='white' bgColor='#090A2E' btnlbl="Login" Press={() => alert("Logged In")} />
+        <Buttons textColor='white' bgColor='#090A2E' btnlbl="Login" press={() => loginUser()} />
         <View style={{ display: 'flex', flexDirection :'row', justifyContent: "center" }}>
           <Text style={{ fontSize: 16, fontWeight:"bold" }}>Don't have an account ? </Text>
           <TouchableOpacity onPress={() => nv.navigation.navigate("Signup")}>
