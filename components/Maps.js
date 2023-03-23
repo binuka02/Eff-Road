@@ -41,7 +41,7 @@ const Maps = () => {
         if(!origin || !destination) return;
 
         mapRef.current.fitToSuppliedMarkers(['Origin', 'Destination'], {
-            edgePadding: { top: 150, right: 150, bottom: 150, left: 150 },
+            edgePadding: { top: 0, right: 0, bottom: 0, left: 0 },
         });
     }, [origin, destination])
 
@@ -61,8 +61,8 @@ const Maps = () => {
                 feature: data.feature
             }
             newLocations.push(newData); //rwact useState not working
-            console.log(newLocations)
-            setFeatureLocations(newLocations);
+            console.log("socket new locations",newLocations)
+            setFeatureLocations([...newLocations]);
         })
         socket.on("clearLocations",()=>{
            setFeatureLocations([]);
@@ -141,6 +141,7 @@ const Maps = () => {
     >
         {origin && destination && (
             <MapViewDirections
+                location={origin.location}
                 origin={origin.description}
                 destination={destination.description}
                 apikey={GOOGLE_MAPS_APIKEY}
@@ -191,8 +192,6 @@ const Maps = () => {
         )}
 
         {featureLocations.map((location,index) => {
-            console.log('====================================');
-            console.log(location.feature);
             const feature = location.feature
             let image=""
             if(feature === "Accident"){
@@ -213,7 +212,6 @@ const Maps = () => {
             else if(feature === "Traffic"){
                 image = mapImages.Traffic
             }
-            console.log('====================================');
             return (
                 <Marker
                     identifier={location.feature}

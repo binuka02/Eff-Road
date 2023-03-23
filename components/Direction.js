@@ -25,6 +25,7 @@ const Direction = () => {
         <View style={tw`border-t border-gray-200 flex-shrink`}>
           <View>
             <GooglePlacesAutocomplete
+
               placeholder="Tell me where from"
               styles={{
                 container:{
@@ -37,6 +38,7 @@ const Direction = () => {
                     fontSize:18,
                     textAlign:'center',
                 },
+                
             }}
               fetchDetails={true}
               returnKeyType={'search'}
@@ -46,6 +48,7 @@ const Direction = () => {
                 key: GOOGLE_MAPS_APIKEY,
                 language: 'en',
               }}
+              location={origin}
               onPress={(data, details = null) => {
                 dispatch(setOrigin({
                   location: details.geometry.location,

@@ -41,32 +41,6 @@ const NavOptions = () => {
 
     return(
        
-        //     <FlatList
-        //     data={pages}
-        //     horizontal
-        //     keyExtractor={(item) => item.id}
-        //     renderItem={({item}) => (
-        //         <TouchableOpacity 
-        //         onPress={() => navigation.navigate(item.screen)}
-        //         style={tw`p-2 pl-5 pb-12 pt-4 bg-gray-200 m-2 w-40 rounded-lg`}
-        //         disabled={!destination}
-        //         >    
-        //             <View style={tw`${!destination && "opacity-20"}`}>
-                    
-        //                 <Image
-        //                     source={{uri: item.image}}
-        //                     style={{width:120, height:120, resizeMode:"contain"}}
-        //                 />
-        //                 <Text style={tw`mt-6 text-xl font-semibold text-center`}>{item.title}</Text>
-                        
-        //             </View>
-
-                   
-                
-        //         </TouchableOpacity>
-        //     )}
-        
-        // />
         <View style={tw`z-50 relative mx-auto bottom-20 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-500 rounded-full items-center justify-center `}>
         
                     <TouchableOpacity 
@@ -83,33 +57,7 @@ const NavOptions = () => {
                         </View>
                     </TouchableOpacity>
                 
-            
-            {/* <View>
-            {
-                pages2.map((item,index) => {
-                    return(
-                        <TouchableOpacity 
-                        key={index}
-                        onPress={() => navigation.navigate(item.screen)}
-                        style={tw`p-2 pb-12 pt-10 bg-gray-200 m-2 w-36 h-36 rounded-lg `}
-                    
-                        >    
-                            <View>
-                            
-                                <Image
-                                    source={{uri: item.image}}
-                                    style={{width:80, height:60, resizeMode:"contain",alignSelf:'center',justifyContent:"center"} }
-                                />
-                                
-                            </View>
-
-                        
-                    
-                        </TouchableOpacity>
-                    )
-                })
-            }
-            </View> */}
+    
         </View>
     );
 };
