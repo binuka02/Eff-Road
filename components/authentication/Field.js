@@ -5,8 +5,9 @@ const Field = (nv) => {
   return (
     <TextInput
     {...nv}
-    style={{borderRadius: 100, color: '#b3b3b3', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220, 220)', marginVertical: 10}}
-    placeholderTextColor='#b3b3b3'></TextInput>
+    style={{borderRadius: 100, color: '#3b3b3b', paddingHorizontal: 10, width: '78%', height:40 ,backgroundColor: 'rgb(220,220, 220)', marginVertical: 10, paddingLeft:20, fontSize: 14, }}
+    placeholderTextColor='#7a7a7a'>
+    </TextInput>
 );  
 };
 

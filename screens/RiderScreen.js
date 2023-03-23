@@ -12,11 +12,11 @@ const RiderScreen = () => {
     const Stack = createStackNavigator();
   return (
  
-    <View>
-        <View style={tw`h-2/3`}>
+    <View style={{position:"relative",flex:1}}>
+        <View style={tw`h-2/3 flex-1 `}>
             <Maps/>
         </View>
-        <View style={tw`h-1/3 rounded-2xl`}>
+        <View style={tw`h-1/3 absolute bottom-0 left-0 right-0`}>
             <Stack.Navigator>
                 <Stack.Screen
                     name="Direction"
@@ -51,4 +51,4 @@ const RiderScreen = () => {
 
 export default RiderScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create();

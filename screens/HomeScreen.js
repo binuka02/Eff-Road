@@ -16,7 +16,7 @@ const HomeScreen = () => {
         <SafeAreaView style={tw`bg-white h-full`}>
             <View style={tw`flex-row px-6 mt-10 items-center`}>
                 <View style={tw`w-16 h-16 bg-black rounded-full items-center justify-center`}>
-                    <Text style={tw`text-blue-300 text-4xl font-semibold`}>Eff</Text>
+                    <Text style={tw`text-red-300 text-4xl font-semibold`}>Eff</Text>
                 </View>
                 
                     <Text style={tw`text-black text-3xl font-semibold`}>Road</Text>
@@ -25,7 +25,7 @@ const HomeScreen = () => {
 
             <View style={tw`px-6 mt-6`}>
                 <Text style={tw`text-4xl`}>Enjoy your journey with</Text>
-                <Text style={tw`text-blue-400 text-3xl font-bold`}>Good Moments</Text>
+                <Text style={tw`text-red-400 text-3xl font-bold`}>Good Moments</Text>
                 {/* <Text style={tw`text-lg mt-5 font-bold`}>Welcome</Text> */}
                 <Text>The smarter way to navigate. Our app offers real-time updates, turn-by-turn directions, and a range of features to help you get to your destination with ease. With our customizable map views, voice-activated commands, and hands-free operation, you can focus on the road ahead and leave the rest to us.</Text>
             </View>
@@ -67,10 +67,10 @@ const HomeScreen = () => {
                 />
             </View>
 
-            <View style={tw`z-40 opacity-60 w-72 h-72 bg-blue-300 rounded-full absolute top-1/2 -right-36`}></View>
-            <View style={tw`w-72 h-72 opacity-60 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View>
+            {/* <View style={tw`z-40 opacity-60 w-72 h-72 bg-red-300 rounded-full absolute top-1/2 -right-36`}></View>
+            <View style={tw`w-72 h-72 opacity-60 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View> */}
 
-            <View style={tw`z-50 relative items-center justify-center top-16`}>
+            <View style={tw`z-50 relative items-center justify-center top-6`}>
                 <Image
                 // animation="fadeIn"
                 // easing="ease-out"

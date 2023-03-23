@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, Text, Touchable, TouchableOpacity} from 'react-native';
+import {View, Text, Touchable, TouchableOpacity, Image} from 'react-native';
 import LandingBackground from '../components/authentication/LandingBackground';
 import Buttons from '../components/authentication/Buttons';
 import Field from '../components/authentication/Field';
 import axios from 'axios';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import tw from 'tailwind-react-native-classnames';
+
 
 const Signup = props => {
   const [state,setState] = React.useState({
@@ -44,28 +46,22 @@ const Signup = props => {
     
       }
   return (
-    <LandingBackground>
-      <View style={{alignItems: 'center', width: 460}}>
-        <Text
-          style={{
-            color: '#090A2E',
-            fontSize: 54,
-            fontWeight: 'bold',
-            marginTop: 20,
-          }}>
-          Register
-        </Text>
+        
         
         <View
           style={{
-            marginTop: 20,
             backgroundColor: 'white',
-            height: 700,
-            width: 320,
-            borderTopLeftRadius: 130,
-            paddingTop: 70,
+            height: '100%',
+            width: '100%',
+            paddingTop: 50,
             alignItems: 'center',
           }}>
+
+        <Image 
+          source={require("../assets/signup.jpg")}
+          style={tw`w-72 h-44`}
+        />
+
             <Text style={{fontSize: 40, color:'#090A2E', fontWeight: 'bold'}}>
           Welcome 
         </Text>
@@ -98,7 +94,7 @@ const Signup = props => {
             (text) => setState({...state, confirmPassword: text})
           }/>
 
-          <View
+          {/* <View
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -129,36 +125,32 @@ const Signup = props => {
             <Text style={{color: '#090A2E', fontWeight: 'bold', fontSize: 16}}>
               Privacy Policy
             </Text>
-          </View>
-          <Buttons
-            textColor="white"
-            bgColor='#090A2E'
-            btnlbl="Signup"
-            press={() => {
-              registerUser()
-              props.navigation.navigate('HomeScreen');
-            }}
-          />
+          </View> */}
+
+          <TouchableOpacity
+            style={tw`bg-red-500 text-white rounded-2xl py-2 px-36 shadow-2xl mt-8`}
+            onPress={() => Signup()}
+          >
+            <Text style={tw`text-white text-lg font-semibold`}>Signup</Text>
+          </TouchableOpacity>
+
           <View
             style={{
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'center',
+               marginTop:20
             }}>
-            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+            <Text style={{fontSize: 15, fontWeight: 'semibold'}}>
               Already have an account ?{' '}
             </Text>
             <TouchableOpacity
               onPress={() => props.navigation.navigate('Login')}>
-              <Text
-                style={{color: '#090A2E', fontWeight: 'bold', fontSize: 16}}>
-                Login
-              </Text>
+                        <Text style={tw`text-red-500 font-bold text-sm`}>Login</Text>
+
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </LandingBackground>
   );
 };
 

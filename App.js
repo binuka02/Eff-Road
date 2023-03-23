@@ -72,11 +72,11 @@ const Tab = createBottomTabNavigator();
       <NavigationContainer>
         <SafeAreaProvider>
           <Stack.Navigator>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="Login"
               component={Login}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name="HomeScreen"
               component={HomeScreen}

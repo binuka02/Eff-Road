@@ -41,7 +41,7 @@ const NavOptions = () => {
 
     return(
        
-        <View style={tw`z-50 relative mx-auto bottom-20 w-24 h-24 border-l-2 border-r-2 border-t-4 border-blue-500 rounded-full items-center justify-center `}>
+        // <View style={tw`z-50 relative mx-auto bottom-4 w-20 h-20 border-l-2 border-r-2 border-t-4 border-black rounded-full items-center justify-center `}>
         
                     <TouchableOpacity 
                     
@@ -52,13 +52,13 @@ const NavOptions = () => {
                     >    
                     
                         {/* <View style={tw`${!destination && "opacity-20"}`}> */}
-                        <View style={tw` w-20 h-20 items-center justify-center rounded-full bg-blue-500 shadow-2xl`}>
-                            <Text style={tw`text-gray-200 text-4xl font-semibold shadow-2xl`}>Go</Text>                
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-red-400 shadow-2xl`}>
+                            <Text style={tw`text-white text-3xl font-semibold shadow-2xl`}>Go</Text>                
                         </View>
                     </TouchableOpacity>
                 
     
-        </View>
+        // </View>
     );
 };
 

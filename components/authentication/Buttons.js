@@ -11,7 +11,7 @@ export default function Buttons({btnlbl, bgcolor, txtcolor,press}){
             alignItems: 'center',
             width: 280,
             paddingVertical: 10,
-            height: 40,
+            height: 50,
             marginTop: 7,
         }}>
         <Text style={{color: txtcolor, fontSize: 20, fontWeight:'bold'}}>{btnlbl}</Text>

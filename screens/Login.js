@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import LandingBackground from '../components/authentication/LandingBackground'
 import Buttons from '../components/authentication/Buttons';
@@ -6,6 +6,8 @@ import Field from '../components/authentication/Field';
 import axios from 'axios'
 import {API_URL} from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import tw from 'tailwind-react-native-classnames';
+
 
 const Login = (nv) => {
 
@@ -34,29 +36,27 @@ password: ""
 
   }
   return (
-    <LandingBackground>
-    <View style={{alignItems: 'center', width: 460}}>
-      <Text
-        style={{
-          color: '#090A2E',
-          fontSize: 44,
-          fontWeight: 'bold',
-          marginVertical: 20,
-        }}>
-        Login
-      </Text>
+     
       <View
         style={{
           backgroundColor: 'white',
-          height: 700,
-          width: 320,
-          borderTopLeftRadius: 130,
-          paddingTop: 100,
+          height: '100%',
+          width: '100%',
+          paddingTop: 50,
           alignItems: 'center',
         }}>
-        <Text style={{fontSize: 40, color:'#090A2E', fontWeight: 'bold'}}>
+
+        <Image 
+          source={require("../assets/login.jpg")}
+          style={tw`w-72 h-72`}
+        />
+
+        <Text style={{fontSize: 40, color:'#090A2E', fontWeight: 'bold', marginTop:40}}>
           Welcome Back
         </Text>
+
+
+
         <Text
           style={{
             color: 'grey',
@@ -73,21 +73,26 @@ password: ""
           setState({...state, password: value})
         }} />
         <View
-          style={{alignItems: 'flex-end', width: '78%', paddingRight: 16, marginBottom: 200}}>
-          <Text style={{color: '#090A2E', fontWeight: 'bold', fontSize: 16}}>
+          style={{alignItems: 'flex-end', width: '78%', paddingRight: 16}}>
+          {/* <Text style={{color: '#090A2E', fontWeight: 'bold', fontSize: 16}}>
             Forgot Password ?
-          </Text>
+          </Text> */}
         </View>
-        <Buttons textColor='white' bgColor='#090A2E' btnlbl="Login" press={() => loginUser()} />
-        <View style={{ display: 'flex', flexDirection :'row', justifyContent: "center" }}>
-          <Text style={{ fontSize: 16, fontWeight:"bold" }}>Don't have an account ? </Text>
+
+        <TouchableOpacity
+          style={tw`bg-red-500 text-white rounded-2xl py-2 px-36 shadow-2xl mt-16`}
+          onPress={() => loginUser()}
+        >
+          <Text style={tw`text-white text-lg font-semibold`}>Login</Text>
+        </TouchableOpacity>
+
+        <View style={{ display: 'flex', flexDirection :'row', justifyContent: "center", marginTop:20}}>
+          <Text style={{ fontSize: 15, fontWeight:"bold" }}>Don't have an account ? </Text>
           <TouchableOpacity onPress={() => nv.navigation.navigate("Signup")}>
-          <Text style={{ color: '#090A2E', fontWeight: 'bold', fontSize: 16 }}>Signup</Text>
+          <Text style={tw`text-red-500 font-semibold text-sm`}>Signup</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
-  </LandingBackground>
 );
 };
 

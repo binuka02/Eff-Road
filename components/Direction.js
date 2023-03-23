@@ -19,7 +19,7 @@ const Direction = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   return (
-    <SafeAreaView style={tw`bg-white flex-1`}>
+    <SafeAreaView style={tw`bg-white flex-1 rounded-2xl`}>
         <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, Binuka Silva!👋</Text>
         {/* <Text>{destination(0)}</Text> */}
         <View style={tw`border-t border-gray-200 flex-shrink`}>
