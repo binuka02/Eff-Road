@@ -18,6 +18,10 @@ const StartJourney = () => {
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
 
+  console.log('====================================');
+  console.log(origin);
+  console.log('====================================');
+
   return (
     <View style={styles.container}>
 <View style={styles.boxContain}>
@@ -28,8 +32,8 @@ const StartJourney = () => {
           </View>
           <View style={styles.box}>
             <View style={tw` my-auto`}>
-              <Text style={tw`font-semibold `}>Colombo, Sri Lanka</Text> 
-              <Text style={tw`font-semibold`}>Colombo, Sri Lanka</Text>            
+              <Text style={tw`font-semibold `}>{origin.description}</Text> 
+              <Text style={tw`font-semibold`}>{destination.description}</Text>            
            
             </View>
           </View>

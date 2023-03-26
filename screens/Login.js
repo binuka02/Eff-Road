@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native'
 import React from 'react'
 import LandingBackground from '../components/authentication/LandingBackground'
 import Buttons from '../components/authentication/Buttons';
@@ -27,7 +27,7 @@ password: ""
       console.log(response.data);
       const user = response.data
       AsyncStorage.setItem('user', JSON.stringify(user))
-      nv.navigation.navigate("HomeScreen")
+      nv.navigation.navigate("Main")
     } catch (error) {
       console.log(error);
       
@@ -36,8 +36,11 @@ password: ""
 
   }
   return (
-     
-      <View
+    
+    <KeyboardAvoidingView
+    behavior='position'
+    >
+    <View
         style={{
           backgroundColor: 'white',
           height: '100%',
@@ -72,6 +75,7 @@ password: ""
         <Field placeholder="Password" secureTextEntry={true} value={state.password} onChangeText={(value)=>{
           setState({...state, password: value})
         }} />
+
         <View
           style={{alignItems: 'flex-end', width: '78%', paddingRight: 16}}>
           {/* <Text style={{color: '#090A2E', fontWeight: 'bold', fontSize: 16}}>
@@ -81,8 +85,10 @@ password: ""
 
         <TouchableOpacity
           style={tw`bg-red-500 text-white rounded-2xl py-2 px-36 shadow-2xl mt-16`}
-          onPress={() => loginUser()}
-        >
+          onPress={() => {
+            loginUser();
+          }}
+          >
           <Text style={tw`text-white text-lg font-semibold`}>Login</Text>
         </TouchableOpacity>
 
@@ -93,6 +99,7 @@ password: ""
           </TouchableOpacity>
         </View>
       </View>
+          </KeyboardAvoidingView>
 );
 };
 

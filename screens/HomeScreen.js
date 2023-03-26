@@ -7,6 +7,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import { setDestination, setOrigin } from "../slices/navSlice";
 import { useDispatch } from "react-redux";
+import { ScrollView } from "react-navigation";
 // import * as Animatable from 'react-native-animatable';
 
 const HomeScreen = () => {
@@ -24,8 +25,8 @@ const HomeScreen = () => {
             </View>
 
             <View style={tw`px-6 mt-6`}>
-                <Text style={tw`text-4xl`}>Enjoy your journey with</Text>
-                <Text style={tw`text-red-400 text-3xl font-bold`}>Good Moments</Text>
+                <Text style={tw`text-3xl`}>Enjoy your journey with</Text>
+                <Text style={tw`text-red-400 text-2xl font-bold`}>Good Moments</Text>
                 {/* <Text style={tw`text-lg mt-5 font-bold`}>Welcome</Text> */}
                 <Text>The smarter way to navigate. Our app offers real-time updates, turn-by-turn directions, and a range of features to help you get to your destination with ease. With our customizable map views, voice-activated commands, and hands-free operation, you can focus on the road ahead and leave the rest to us.</Text>
             </View>
@@ -74,8 +75,8 @@ const HomeScreen = () => {
                 <Image
                 // animation="fadeIn"
                 // easing="ease-out"
-                    source={require("../assets/jeep.png")}
-                    style={tw`w-96 h-96`}
+                    source={require("../assets/map.jpg")}
+                    style={tw`w-96 py-10 h-72`}
                 />
                
             </View>
@@ -126,6 +127,7 @@ const HomeScreen = () => {
                 <NavOptions/>
             </View> */}
         </SafeAreaView>
+        
     );
 };
 
