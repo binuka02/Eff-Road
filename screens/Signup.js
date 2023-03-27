@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Touchable, TouchableOpacity, Image} from 'react-native';
+import {View, Text, Touchable, TouchableOpacity, Image,KeyboardAvoidingView} from 'react-native';
 import LandingBackground from '../components/authentication/LandingBackground';
 import Buttons from '../components/authentication/Buttons';
 import Field from '../components/authentication/Field';
@@ -37,7 +37,7 @@ const Signup = props => {
           console.log(response.data);
           const user = response.data
           AsyncStorage.setItem('user', JSON.stringify(user))
-          nv.navigation.navigate("HomeScreen")
+          props.navigation.navigate("Main")
         } catch (error) {
           console.log(error);
           
@@ -47,7 +47,9 @@ const Signup = props => {
       }
   return (
         
-        
+    <KeyboardAvoidingView
+    behavior='position'
+    >
         <View
           style={{
             backgroundColor: 'white',
@@ -129,7 +131,7 @@ const Signup = props => {
 
           <TouchableOpacity
             style={tw`bg-red-500 text-white rounded-2xl py-2 px-36 shadow-2xl mt-8`}
-            onPress={() => Signup()}
+            onPress={() => registerUser()}
           >
             <Text style={tw`text-white text-lg font-semibold`}>Signup</Text>
           </TouchableOpacity>
@@ -151,6 +153,7 @@ const Signup = props => {
             </TouchableOpacity>
           </View>
         </View>
+        </KeyboardAvoidingView>
   );
 };
 

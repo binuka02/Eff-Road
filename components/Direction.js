@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View,TouchableOpacity,Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from 'tailwind-react-native-classnames'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
@@ -9,10 +9,78 @@ import { useDispatch } from "react-redux";
 import { selectOrigin, selectDestination } from '../slices/navSlice'
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
+import { getAddress } from '../util/location'
+import * as Location from 'expo-location';
+import { KeyboardAvoidingView } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const Direction = () => {
 
+  const [currentLocation, setCurrentLocation] = React.useState('');
+  const ref = useRef(null);
+  const [user,setUser] = React.useState(null);
 
+  useEffect(() => {
+    const init = async()=>{
+      const userJson = await AsyncStorage.getItem('user');
+      let user = null;
+      if(userJson){
+        user = JSON.parse(userJson);
+        setUser(user);
+      }
+    }
+
+    init()
+  }, []);
+
+  async function getLocationPermission(){
+    let {status} = await Location.requestForegroundPermissionsAsync();
+    if(status !== 'granted'){
+        alert('Permission to access location was denied');
+        return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    const current = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+    }
+    const data = await getAddress(
+      current.latitude,
+      current.longitude
+    )
+
+    dispatch(setOrigin({
+          location: {
+            lat: current.latitude,
+            lng: current.longitude,
+          },
+          description:data
+        }));
+
+    
+
+    navigation.navigate('Start')
+    // getAddress(
+    //   current.latitude,
+    //   current.longitude
+    // ).then((data) => {
+    //   setCurrentLocation(data);
+    //   console.log(data);
+    //   ref.current?.setAddressText(data);
+    //   dispatch(setOrigin({
+    //     location: {
+    //       lat: current.latitude,
+    //       lng: current.longitude,
+    //     },
+    //     description: data.description,
+    //   }));
+      
+    //   navigation.navigate('Start')
+    // });
+    // origin.latitude = current.latitude;
+    // origin.longitude = current.longitude;
+}
 
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
@@ -20,12 +88,14 @@ const Direction = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`bg-white flex-1 rounded-2xl`}>
-        <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, Binuka Silva!👋</Text>
+      <KeyboardAvoidingView>
+        {user && <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, {user.firstName +" " +user.lastName}!👋</Text>}
         {/* <Text>{destination(0)}</Text> */}
         <View style={tw`border-t border-gray-200 flex-shrink`}>
+          
           <View>
             <GooglePlacesAutocomplete
-
+              ref={ref}
               placeholder="Tell me where from"
               styles={{
                 container:{
@@ -50,6 +120,9 @@ const Direction = () => {
               }}
               location={origin}
               onPress={(data, details = null) => {
+                console.log('====================================');
+                console.log(data.description);
+                console.log('====================================');
                 dispatch(setOrigin({
                   location: details.geometry.location,
                   description: data.description,
@@ -69,14 +142,18 @@ const Direction = () => {
             </TouchableOpacity>
           </View> */}
 
-
+          <TouchableOpacity
+          onPress={getLocationPermission}
+          >
+            <Text style={tw`text-gray-400 font-semibold mx-auto text-sm`}>From Here</Text>
+          </TouchableOpacity>
         
         </View>
 
         
 
         
-
+        </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }

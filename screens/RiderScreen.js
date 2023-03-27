@@ -6,6 +6,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Direction from '../components/Direction';
 import Start from '../components/StartJourney';
 import Features from '../components/Features';
+import Emergency from '../components/Emergency';
+import ViewMap from '../screens/ViewMap';
 
 const RiderScreen = () => {
 
@@ -16,10 +18,10 @@ const RiderScreen = () => {
         <View style={tw`h-2/3 flex-1 `}>
             <Maps/>
         </View>
-        <View style={tw`h-1/3 absolute bottom-0 left-0 right-0`}>
+        <View style={tw`h-1/3 absolute bottom-0 left-0 right-0 `}>
             <Stack.Navigator>
                 <Stack.Screen
-                    name="Direction"
+                    name="Direction" s
                     component={Direction}
                     options={{ 
                         headerShown: false
@@ -40,6 +42,16 @@ const RiderScreen = () => {
                         headerShown: false
                     }}
                 />
+
+                <Stack.Screen
+                    name="Emergency"
+                    component={Emergency}
+                    options={{ 
+                        headerShown: false
+                    }}
+                />
+
+               
             </Stack.Navigator>
         </View>
         

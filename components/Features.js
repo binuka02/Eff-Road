@@ -6,10 +6,12 @@ import * as Location from 'expo-location';
 import axios from 'axios'
 import { API_URL } from '@env'; 
 import tw from 'tailwind-react-native-classnames';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Features = () => {
 
+    const navigation = useNavigation();
 
     const [mapRegion, setMapRegion] = useState({
         latitude: 6.8649,
@@ -62,7 +64,8 @@ await axios.post(API_URL+"/location",{
         {/* <Button title="Police"  onPress={()=>userLocation("Police")} /> */}
         {/* <Button title="Accident" onPress={()=>userLocation("Accident")} /> */}
 
-        <Text style={tw`mt-6 font-bold text-lg`}>Let Other's Know..</Text>
+        <Text style={tw`mt-2 font-bold text-lg`}>Let Other's Know..</Text> 
+
 
 
         <View style={styles.boxContain}>
@@ -87,7 +90,7 @@ await axios.post(API_URL+"/location",{
             <View style={styles.box}>
                 <View style={styles.inner}>
                     <TouchableOpacity 
-                        onPress={()=>userLocation("Emergency")}
+                        onPress={() => navigation.navigate('Emergency')}
                         title="Emergency"
                         style={tw`items-center `}
                     >    
@@ -154,7 +157,8 @@ await axios.post(API_URL+"/location",{
 
                     </TouchableOpacity>            
                 </View>
-            </View><View style={styles.box}>
+            </View>
+            <View style={styles.box}>
                 <View style={styles.inner}>
                     <TouchableOpacity 
                         onPress={()=>userLocation("RoadsideHelp")}
@@ -174,6 +178,13 @@ await axios.post(API_URL+"/location",{
             </View>
           
         </View>
+
+        <TouchableOpacity
+            onPress={() => navigation.navigate('ViewMap')}
+        >
+            <Text style={tw`text-sm bg-red-500 px-6 py-1 rounded-full text-gray-200 font-semibold shadow-2xl`}>End Journey</Text>
+        </TouchableOpacity>
+
     </View>
 
   )
@@ -193,7 +204,7 @@ const styles = StyleSheet.create({
     
     boxContain: {
        width: '80%',
-       height: '85%',
+       height: '70%',
        backgroundColor: 'white',
        flexDirection: 'row',
        flexWrap: 'wrap',
