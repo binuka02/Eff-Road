@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import React from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
@@ -7,6 +7,18 @@ import { useState } from 'react'
 import { StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { FlatList } from 'react-native'
+import tw from 'tailwind-react-native-classnames';
+
+const SeperatorStyle = {
+    height: 1,
+    backgroundColor: '#d1d1d1',
+    width: '90%',
+    alignSelf: 'center',
+    marginBottom: 5,
+    marginTop: 7
+  }
+  
+  const Seperator = () => <View style={SeperatorStyle} />
 
 const JourneyHistory = () => {
     const [journeys,setJourneys] = useState([])
@@ -29,18 +41,30 @@ const JourneyHistory = () => {
     },[])
   return (
     <View style={styles.container}>
+        <View style={tw`mt-12`}>
+        <Text style={tw`text-2xl font-semibold shadow-2xl`}>Journey History</Text>
+
+        </View>
+        <Seperator/>
+        <ScrollView>
         <FlatList
         data={journeys}
         keyExtractor={(item)=>item.id}
         renderItem={({item})=>(
-            <View>
-          <Text>Origin:{item.origin}</Text>
-          <Text>Destination:{item.destination}</Text>
-          <Text>Time:{item.timestamp}</Text>
+        <View style={tw`mt-4  bg-gray-200 pt-2 pl-4 pr-4 pb-4 w-96 rounded-2xl shadow-sm items-center`}>
+          <Text style={tw`text-base font-semibold mt-2`}>Time</Text>
+          <Text>{item.timestamp}</Text>
+          <Text style={tw`text-base font-semibold mt-2`}>Origin</Text>
+          <Text>{item.origin}</Text>
+          <Text style={tw`text-base font-semibold mt-2`}>Destination</Text>
+          <Text>{item.destination}</Text>
+
         </View>
 
         )}
         />
+</ScrollView>
+
 
     </View>
   )
@@ -51,6 +75,10 @@ export default JourneyHistory
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginTop: StatusBar.currentHeight || 20
+        marginTop: StatusBar.currentHeight || 30,
+        backgroundColor:'white',
+        textAlign:'center',
+        alignItems:'center',
+        paddingBottom:20
     }
 })
