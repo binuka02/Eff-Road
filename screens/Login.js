@@ -39,6 +39,8 @@ password: ""
     
     <KeyboardAvoidingView
     behavior='position'
+  
+    style={{flex:1, backgroundColor:'white'}}
     >
     <View
         style={{

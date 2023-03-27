@@ -12,13 +12,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 // import {Icons} from 'react-native-ico-material-design';
 
 // Screens
 import Account from './screens/Account';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
 
+import JourneyHistory from './screens/JourneyHistory';
 
 
 
@@ -58,22 +59,32 @@ const [initialRoute, setInitialRoute] = useState('Login')
             backgroundColor: '#e8e8e8',
             flexDirection: 'row',
             width: '92%',
-            justifyContent: 'space-evenly',
             borderRadius: 20,
             marginBottom:10
         },
+        tabBarShowLabel: false,
+        
+        
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             let rn = route.name;
 
             if (rn === homeName) {
               iconName = focused ? 'home' : 'home-outline';
+              color = focused ? '#EF5350': 'grey';
+              size = focused ? 30 : 25;
 
             } else if (rn === ViewMap1) {
               iconName = focused ? 'map' : 'map-outline';
+              color = focused ? '#EF5350': 'grey';
+              size = focused ? 30 : 25;
+
 
             } else if (rn === Account1) {
               iconName = focused ? 'person-circle' : 'person-circle-outline';
+              color = focused ? '#EF5350': 'grey';
+              size = focused ? 35 : 30;
+
             }
 
             // You can return any component that you like here!
@@ -126,6 +137,11 @@ const [initialRoute, setInitialRoute] = useState('Login')
              <Stack.Screen
               name="Signup"
               component={Signup}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="JourneyHistory"
+              component={JourneyHistory}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

@@ -12,12 +12,27 @@ import { useNavigation } from '@react-navigation/native'
 import { getAddress } from '../util/location'
 import * as Location from 'expo-location';
 import { KeyboardAvoidingView } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const Direction = () => {
 
   const [currentLocation, setCurrentLocation] = React.useState('');
   const ref = useRef(null);
+  const [user,setUser] = React.useState(null);
+
+  useEffect(() => {
+    const init = async()=>{
+      const userJson = await AsyncStorage.getItem('user');
+      let user = null;
+      if(userJson){
+        user = JSON.parse(userJson);
+        setUser(user);
+      }
+    }
+
+    init()
+  }, []);
 
   async function getLocationPermission(){
     let {status} = await Location.requestForegroundPermissionsAsync();
@@ -74,7 +89,7 @@ const Direction = () => {
   return (
     <SafeAreaView style={tw`bg-white flex-1 rounded-2xl`}>
       <KeyboardAvoidingView>
-        <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, Binuka Silva!👋</Text>
+        {user && <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, {user.firstName +" " +user.lastName}!👋</Text>}
         {/* <Text>{destination(0)}</Text> */}
         <View style={tw`border-t border-gray-200 flex-shrink`}>
           

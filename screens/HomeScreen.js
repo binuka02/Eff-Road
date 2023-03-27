@@ -17,7 +17,7 @@ const HomeScreen = () => {
         <SafeAreaView style={tw`bg-white h-full`}>
             <View style={tw`flex-row px-6 mt-10 items-center`}>
                 <View style={tw`w-16 h-16 bg-black rounded-full items-center justify-center`}>
-                    <Text style={tw`text-red-300 text-4xl font-semibold`}>Eff</Text>
+                    <Text style={tw`text-red-400 text-4xl font-semibold`}>Eff</Text>
                 </View>
                 
                     <Text style={tw`text-black text-3xl font-semibold`}>Road</Text>

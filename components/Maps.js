@@ -4,7 +4,7 @@ import tw from 'tailwind-react-native-classnames';
 import * as Location from 'expo-location';
 import MapView, {Marker} from 'react-native-maps';
 import { useSelector } from 'react-redux';
-import { selectDestination, selectOrigin } from '../slices/navSlice';
+import { selectDestination, selectOrigin,setOrigin } from '../slices/navSlice';
 import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useRef } from 'react';
@@ -35,6 +35,8 @@ const Maps = () => {
     const destination = useSelector(selectDestination);
     const origin = useSelector(selectOrigin);
     const mapRef = useRef(null);
+    const originRef = useRef(null);
+
     const [featureLocations,setFeatureLocations] = useState([]);
 
     useEffect(()=>{
@@ -115,26 +117,49 @@ const Maps = () => {
 
     //Wrong//
 
-    // const [currentLocation, setCurrentLocation] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState(null);
 
-    // useEffect(() => {
-    //     (async () => {
-          
-    //       let { status } = await Location.requestForegroundPermissionsAsync();
-    //       if (status == 'granted') {
-    //         console.log('Permission granted');
-    //       }
-    //       else{
-    //         console.log('Permission denied');
-    //       }
+    useEffect(() => {
+  
+        const unsubscribe =  setInterval(() => {
+            (async () => {
+              
+              let { status } = await Location.requestForegroundPermissionsAsync();
+              if (status == 'granted') {
+                console.log('Permission granted');
+              }
+              else{
+                console.log('Permission denied');
+              }
+        
+              const currentLocation = await Location.getCurrentPositionAsync({});
+              setCurrentLocation({
+                ...origin,
+                lat: currentLocation.coords.latitude,
+                lng: currentLocation.coords.longitude,
+              });
+
+              console.log('====================================');
+              console.log(currentLocation);
+              console.log('====================================');
     
-    //       const currentLocation = await Location.getCurrentPositionAsync({});
-    //       setCurrentLocation(currentLocation);
-
-    //       console.log(currentLocation);
-    //       selectOrigin(currentLocation);
-    //     })();
-    //   }, []);
+              setOrigin({...origin,location:{
+                  lat: currentLocation.coords.latitude,
+                  lng: currentLocation.coords.longitude
+                }});
+                originRef.current?.animateMarkerToCoordinate({
+                    latitude: currentLocation.coords.latitude,
+                    longitude: currentLocation.coords.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                },7000);
+                // originRef.current?.redraw();
+            })();
+            
+        }, 10000);
+        console.log(originRef.current);
+    return () => clearInterval(unsubscribe);    
+}, [originRef]);
 
 
   return (
@@ -186,12 +211,14 @@ const Maps = () => {
             >
             <Image source={destinationImage} style={{height: 50, width: 50}}/>
             </Marker>
+            
         )}
 
         
 
         {origin?.location && (
-            <Marker
+            <Marker.Animated
+            ref={originRef}
                 coordinate={{
                     latitude: origin.location.lat,
                     longitude: origin.location.lng,
@@ -201,7 +228,7 @@ const Maps = () => {
                 identifier="Origin"
             >
                 <Image source={originImage} style={{height: 50, width: 50}}/>
-            </Marker>
+            </Marker.Animated>
         )}
 
         {featureLocations.map((location,index) => {
