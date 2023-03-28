@@ -26,7 +26,16 @@ const SeperatorStyle = {
 const Seperator = () => <View style={SeperatorStyle} />
 
 
+const Seperator2Style = {
+  height: 2,
+  backgroundColor: '#e2e2e2',
+  width: '80%',
+  alignSelf: 'center',
+  marginBottom: 20,
+  marginTop:20
+}
 
+const Seperator2 = () => <View style={Seperator2Style} />
 
 
 export default function Account({navigation}){
@@ -101,7 +110,7 @@ const [state,setState] = React.useState({
             <TouchableOpacity
             onPress={show}
             >
-              <Image source={require('../assets/editprofile.png')} style={tw`h-4 w-4 shadow-2xl`}  />
+              <Image source={require('../assets/editprofile.png')} style={tw`h-6 w-6 shadow-2xl`}  />
             </TouchableOpacity>
 
 
@@ -144,6 +153,10 @@ const [state,setState] = React.useState({
           <Field placeholder="Email" keyboardType={'email-address'} value={state.email} onChangeText={
             (text) => setState({...state, email: text})
           }/>
+
+          <Seperator2/>
+
+          <Text style={tw`text-lg font-semibold text-gray-400 `}>Change Password</Text>
           <Field placeholder="Password" secureTextEntry={true} value={state.password} onChangeText={
             (text) => setState({...state, password: text})
           }/>

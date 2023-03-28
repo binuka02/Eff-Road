@@ -5,21 +5,19 @@ import RiderScreen from './screens/RiderScreen';
 import ViewMap from './screens/ViewMap';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
+import Account from './screens/Account';
+import JourneyHistory from './screens/JourneyHistory';
 import store from './store';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-// import {createStackNavigator} from 'react-navigation-stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 // import {Icons} from 'react-native-ico-material-design';
+import tw from 'tailwind-react-native-classnames';
 
-// Screens
-import Account from './screens/Account';
-
-import JourneyHistory from './screens/JourneyHistory';
 
 
 
@@ -29,6 +27,7 @@ export default function App() {
 const homeName = "Home";
 const ViewMap1 = "Map";
 const Account1 = "Account";
+const JourneyHistory1 = "JournyHistory"
 
 const Tab = createBottomTabNavigator();
 const [initialRoute, setInitialRoute] = useState('Login')
@@ -60,7 +59,9 @@ const [initialRoute, setInitialRoute] = useState('Login')
             flexDirection: 'row',
             width: '92%',
             borderRadius: 20,
-            marginBottom:10
+            marginBottom:10,
+            paddingLeft:50,
+            paddingRight:50
         },
         tabBarShowLabel: false,
         
@@ -73,11 +74,16 @@ const [initialRoute, setInitialRoute] = useState('Login')
               iconName = focused ? 'home' : 'home-outline';
               color = focused ? '#EF5350': 'grey';
               size = focused ? 30 : 25;
-
+              
             } else if (rn === ViewMap1) {
               iconName = focused ? 'map' : 'map-outline';
               color = focused ? '#EF5350': 'grey';
               size = focused ? 30 : 25;
+
+            } else if (rn === JourneyHistory1) {
+              iconName = focused ? 'car-sport' : 'car-sport-outline';
+              color = focused ? '#EF5350': 'grey';
+              size = focused ? 33 : 28;
 
 
             } else if (rn === Account1) {
@@ -88,13 +94,16 @@ const [initialRoute, setInitialRoute] = useState('Login')
             }
 
             // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color}/>;
+            return <Ionicons name={iconName} size={size} color={color}
+            style={tw`p-2`}
+            />;
           },
         })}
         >
 
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={ViewMap1} component={ViewMap} />
+        <Tab.Screen name={JourneyHistory1} component={JourneyHistory}/>
         <Tab.Screen name={Account1} component={Account} />
 
 

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Alert } from 'react-native'
 import React from 'react'
 import LandingBackground from '../components/authentication/LandingBackground'
 import Buttons from '../components/authentication/Buttons';
@@ -7,16 +7,35 @@ import axios from 'axios'
 import {API_URL} from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'tailwind-react-native-classnames';
-
+// import Spinner from 'react-native-loading-spinner-overlay';
 
 const Login = (nv) => {
+
 
   const [state,setState] = React.useState({
 email: "",
 password: ""
-  })
+  });
+
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+  
 
   const loginUser = async () => {
+
+    if (state.email === "" || state.password === "") {
+      Alert.alert('Missing Fields!', 'Be sure all fields are filled');
+      return;
+    }
+
+    else if ( !validateEmail(state.email)){
+      Alert.alert('Invalid Email!', 'Be sure entered email is correct');
+      return;
+    }
+
     try {
       const response = await axios.post(API_URL+"/auth/login",{
         email: state.email,
@@ -30,9 +49,15 @@ password: ""
       nv.navigation.navigate("Main")
     } catch (error) {
       console.log(error);
-      
+      Alert.alert('Incorrect Email or Password!', "The email & password entered doesn't match. Please try again.", [
+        {
+          text: 'OK',
+        },
+      ],
+    
+      );
     }
-
+    
 
   }
   return (
@@ -84,6 +109,8 @@ password: ""
             Forgot Password ?
           </Text> */}
         </View>
+
+        
 
         <TouchableOpacity
           style={tw`bg-red-500 text-white rounded-2xl py-2 px-36 shadow-2xl mt-16`}

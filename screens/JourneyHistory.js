@@ -12,7 +12,7 @@ import tw from 'tailwind-react-native-classnames';
 const SeperatorStyle = {
     height: 1,
     backgroundColor: '#d1d1d1',
-    width: '90%',
+    width: '80%',
     alignSelf: 'center',
     marginBottom: 5,
     marginTop: 7
@@ -46,13 +46,12 @@ const JourneyHistory = () => {
 
         </View>
         <Seperator/>
-        <ScrollView>
         <FlatList
         data={journeys}
         keyExtractor={(item)=>item.id}
         renderItem={({item})=>(
-        <View style={tw`mt-4  bg-gray-200 pt-2 pl-4 pr-4 pb-4 w-96 rounded-2xl shadow-sm items-center`}>
-          <Text style={tw`text-base font-semibold mt-2`}>Time</Text>
+        <View style={tw`mt-4  bg-gray-200 pt-2 pl-4 pr-4 pb-4 w-80 rounded-2xl shadow-sm items-center`}>
+          <Text style={tw`text-base font-semibold mt-2`}>Started Time</Text>
           <Text>{item.timestamp}</Text>
           <Text style={tw`text-base font-semibold mt-2`}>Origin</Text>
           <Text>{item.origin}</Text>
@@ -63,7 +62,6 @@ const JourneyHistory = () => {
 
         )}
         />
-</ScrollView>
 
 
     </View>
