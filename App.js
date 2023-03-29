@@ -27,7 +27,7 @@ export default function App() {
 const homeName = "Home";
 const ViewMap1 = "Map";
 const Account1 = "Account";
-const JourneyHistory1 = "JournyHistory"
+const JourneyHistory1 = "JourneyHistory"
 
 const Tab = createBottomTabNavigator();
 const [initialRoute, setInitialRoute] = useState('Login')
@@ -59,6 +59,7 @@ const [initialRoute, setInitialRoute] = useState('Login')
             flexDirection: 'row',
             width: '92%',
             borderRadius: 20,
+            marginTop:10,
             marginBottom:10,
             paddingLeft:50,
             paddingRight:50
@@ -148,11 +149,11 @@ const [initialRoute, setInitialRoute] = useState('Login')
               component={Signup}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="JourneyHistory"
               component={JourneyHistory}
               options={{ headerShown: false }}
-            />
+            /> */}
           </Stack.Navigator>
         </SafeAreaProvider>
       </NavigationContainer>

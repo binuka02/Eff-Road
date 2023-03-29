@@ -51,7 +51,7 @@ const Signup = props => {
     
           console.log(response.data);
           const user = response.data
-          AsyncStorage.setItem('user', JSON.stringify(user))
+          await AsyncStorage.setItem('user', JSON.stringify(user))
           props.navigation.navigate("Main")
         } catch (error) {
           console.log(error);

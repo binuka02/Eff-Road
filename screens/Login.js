@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Alert } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Alert, ActivityIndicator } from 'react-native'
 import React from 'react'
 import LandingBackground from '../components/authentication/LandingBackground'
 import Buttons from '../components/authentication/Buttons';
@@ -45,17 +45,12 @@ password: ""
 
       console.log(response.data);
       const user = response.data
-      AsyncStorage.setItem('user', JSON.stringify(user))
+      await AsyncStorage.setItem('user', JSON.stringify(user))
       nv.navigation.navigate("Main")
     } catch (error) {
       console.log(error);
-      Alert.alert('Incorrect Email or Password!', "The email & password entered doesn't match. Please try again.", [
-        {
-          text: 'OK',
-        },
-      ],
-    
-      );
+      Alert.alert('Incorrect Email or Password!', "The email & password entered doesn't match. Please try again.");
+      return;
     }
     
 
@@ -67,6 +62,17 @@ password: ""
   
     style={{flex:1, backgroundColor:'white'}}
     >
+
+{!loginUser && <ActivityIndicator
+    size={50}
+    color="#EF5350"
+    style={
+      {
+        flex:1,
+        backgroundColor: 'white'
+      }
+    }
+    />}
     <View
         style={{
           backgroundColor: 'white',

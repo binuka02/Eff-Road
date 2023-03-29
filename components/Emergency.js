@@ -1,10 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native'
 import React from 'react'
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 
 const Emergency = () => {
     const navigation = useNavigation();
+
+    const nearHospitals = () => {
+      const url = 'https://www.google.com/maps/search/hospital/@6.8692024,79.8845187,13z?hl=en';
+      Linking.openURL(url);
+    };
+
   return (
     <View style={styles.container}>
                 <Text style={tw`mt-6 font-bold text-xl`}>Nearest</Text>
@@ -14,12 +20,22 @@ const Emergency = () => {
                 <View style={tw` my-auto mx-auto items-center`}>
                     <Text style={tw`font-semibold text-base`}>Hospital</Text> 
                     <Text style={tw` `}>ABC</Text> 
+                    <TouchableOpacity
+                    onPress={nearHospitals}
+                    >
+                      <Text style={tw`text-red-400 text-xs font-semibold`}>View More</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.box}>
                 <View style={tw` my-auto mx-auto items-center`}>
                     <Text style={tw`font-semibold text-base`}>Garage</Text> 
-                    <Text style={tw``}>XYZ</Text>            
+                    <Text style={tw``}>XYZ</Text>        
+                    <TouchableOpacity
+                    
+                    >
+                      <Text style={tw`text-red-400 text-xs font-semibold`}>View More</Text>
+                    </TouchableOpacity>    
                </View>
             </View>
         </View>

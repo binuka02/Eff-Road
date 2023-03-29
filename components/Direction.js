@@ -61,7 +61,7 @@ const Direction = () => {
     
 
     navigation.navigate('Start')
-    // getAddress(
+    // getAddress(g
     //   current.latitude,
     //   current.longitude
     // ).then((data) => {
@@ -120,9 +120,6 @@ const Direction = () => {
               }}
               location={origin}
               onPress={(data, details = null) => {
-                console.log('====================================');
-                console.log(data.description);
-                console.log('====================================');
                 dispatch(setOrigin({
                   location: details.geometry.location,
                   description: data.description,
