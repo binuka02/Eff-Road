@@ -8,6 +8,8 @@ import { selectOrigin, selectDestination } from '../slices/navSlice'
 import axios from 'axios';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDistanceDuration } from '../util/location';
+import { useState } from 'react';
 
 
 
@@ -21,6 +23,8 @@ const StartJourney = () => {
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
   const [user,setUser] = React.useState(null);
+  const [distance,setDistance] = useState("")
+  const [duration,setDuration] = useState("")
 
   console.log(origin);
 
@@ -32,10 +36,27 @@ const StartJourney = () => {
         user = JSON.parse(userJson);
         setUser(user);
       }
+      
     }
 
     init()
+
+   
   }, []);
+
+  useEffect(() => {
+    const init = async()=>{
+      const data = await getDistanceDuration(origin.location,destination.location)
+      setDistance(data.distance)
+      setDuration(data.duration)
+
+    }
+    if(origin && destination)
+    init()
+  
+
+  }, [origin,destination])
+  
 
 
   const SeperatorStyle = {
@@ -82,7 +103,7 @@ const StartJourney = () => {
             <View style={tw`  mx-auto pt-4 h-12 items-center`}>
             <Image source={require('../assets/distance.png')} style={tw`h-14 w-14 shadow-2xl`} />
             <Text style={styles.txt}>Distance</Text>
-              <Text>8.5 km</Text>            
+              <Text>{distance}</Text>            
             </View>
           </View>
           <View style={styles.box1}>
@@ -107,7 +128,7 @@ const StartJourney = () => {
           <View style={tw` mx-auto pt-4 h-12 items-center`}>
             <Image source={require('../assets/duration.png')} style={tw`h-14 w-14 shadow-2xl`}/>            
             <Text style={styles.txt}>Duration</Text>
-              <Text>15 min</Text>    
+              <Text>{duration}</Text>    
             </View>
           </View>
           {/* <View style={styles.box}>

@@ -49,26 +49,32 @@ const Maps = () => {
 
     //Correct//
 
+    useEffect(() => {
+        socket.on("locationAdded",(data)=>{
+          console.log(data)
+          console.log("socket new data feature locations",featureLocations);
+          const newLocations = featureLocations || [];
+          const newData = {
+              id: data.id,
+              lat: data.lat,
+              lng: data.lng,
+              feature: data.feature
+          }
+          newLocations.push(newData); //rwact useState not working
+          console.log("socket new locations",newLocations)
+          setFeatureLocations(newLocations);
+      })
+  
+      return ()=>{
+          socket.off("locationAdded");
+      }
+      }, [featureLocations]);
+
 
 
     React.useLayoutEffect(() => {
         getLocationPermission();
         getFeatureLocations()
-        socket.on("locationAdded",(data)=>{
-            console.log(data)
-            console.log("socket new data feature locations",featureLocations);
-            const newLocations = featureLocations || [];
-            const newData = {
-                id: data.id,
-                lat: data.lat,
-                lng: data.lng,
-                feature: data.feature
-            }
-            newLocations.push(newData); //rwact useState not working
-            console.log("socket new locations",newLocations)
-            setFeatureLocations([]);
-            setFeatureLocations([...newLocations]);
-        })
         socket.on("clearLocations",({id})=>{
         //    setFeatureLocations([]);
         // console.log(id);
@@ -83,10 +89,9 @@ const Maps = () => {
         })
 
         
-        // return () => {
-        //     socket.off("locationAdded");
-        //     socket.off("clearLocations");
-        // }
+        return () => {
+            socket.off("clearLocations");
+        }
     }, []);
 
     useEffect(() => {
@@ -139,9 +144,7 @@ const Maps = () => {
                 lng: currentLocation.coords.longitude,
               });
 
-              console.log('====================================');
-              console.log(currentLocation);
-              console.log('====================================');
+        
     
               setOrigin({...origin,location:{
                   lat: currentLocation.coords.latitude,
@@ -177,7 +180,7 @@ const Maps = () => {
             longitudeDelta: 0.0421,
         }}
     >
-        {origin && destination && (
+        {origin && destination &&  (
             <MapViewDirections
                 location={origin.location}
                 origin={origin.description}
@@ -216,7 +219,7 @@ const Maps = () => {
 
         
 
-        {origin?.location && (
+        {origin?.location &&  (
             <Marker.Animated
             ref={originRef}
                 coordinate={{

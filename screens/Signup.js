@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Touchable, TouchableOpacity, Image,KeyboardAvoidingView} from 'react-native';
+import {View, Text, Alert, Touchable, TouchableOpacity, Image,KeyboardAvoidingView} from 'react-native';
 import LandingBackground from '../components/authentication/LandingBackground';
 import Buttons from '../components/authentication/Buttons';
 import Field from '../components/authentication/Field';
@@ -18,12 +18,27 @@ const Signup = props => {
     username: "",
     confirmPassword: ""
       })
+
+      const validateEmail = (email) => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+      };
     
       const registerUser = async () => {
         if(state.password !== state.confirmPassword){
-          alert("Passwords do not match")
-          return
+          Alert.alert('Passwords doest not match!', 'Make sure passwords are match ');
+          return;
         }
+        else if(state.firstName==="" || state.lastName=== "" || state.username==="" || state.email===""  || state.password === "" || state.confirmPassword === ""){
+          Alert.alert('Missing Fields!', 'Be sure all fields are filled');
+          return;
+        }
+
+        else if ( !validateEmail(state.email)){
+          Alert.alert('Invalid Email!', 'Be sure entered email is correct');
+          return;
+        }
+
         try {
           const response = await axios.post(API_URL+"/auth/signup",{
             firstName: state.firstName,
@@ -36,11 +51,12 @@ const Signup = props => {
     
           console.log(response.data);
           const user = response.data
-          AsyncStorage.setItem('user', JSON.stringify(user))
+          await AsyncStorage.setItem('user', JSON.stringify(user))
           props.navigation.navigate("Main")
         } catch (error) {
           console.log(error);
-          
+          Alert.alert('Error!', "Oops, something went wrong. Please try again later.");
+          return;
         }
     
     
@@ -76,6 +92,8 @@ const Signup = props => {
           }}>
           Create a new account
         </Text>
+
+        
 
           <Field placeholder="First Name" value={state.firstName} onChangeText={
             (text) => setState({...state, firstName: text})

@@ -1,205 +1,259 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import tw from 'tailwind-react-native-classnames';
+import * as Location from 'expo-location';
+import MapView, {Marker} from 'react-native-maps';
+import { useSelector } from 'react-redux';
+import { selectDestination, selectOrigin,setOrigin } from '../slices/navSlice';
+import MapViewDirections from 'react-native-maps-directions';
+import { GOOGLE_MAPS_APIKEY } from '@env';
+import { useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { mapRegion} from '../components/Features';
+import {socket } from '../socket';  
+import axios from 'axios';
+import { API_URL } from '@env';
 
-const ViewMap = () => {
-  return (
-    <View>
-      <Text>ViewMap</Text>
-    </View>
-  )
+const carImage = require('../assets/car-icon.jpg');
+const destinationImage = require('../assets/destination.png');
+const originImage = require('../assets/origin.png');
+
+const mapImages ={
+    Police : require('../assets/featureImages/police.png'),
+    Emergency : require('../assets/featureImages/emergency.png'),
+    Accident : require('../assets/featureImages/accident.png'),
+    RoadClosure : require('../assets/featureImages/road-closure.png'),
+    Traffic : require('../assets/featureImages/traffic.png'),
+    RoadsideHelp : require('../assets/featureImages/roadside-help.png'),
 }
 
-export default ViewMap
-
-const styles = StyleSheet.create({})
 
 
+// const [distanceDuration, setDistanceDuration] = useState({});
+
+const ViewMap = () => {
+    const destination = useSelector(selectDestination);
+    const origin = useSelector(selectOrigin);
+    const mapRef = useRef(null);
+    const originRef = useRef(null);
+
+    const [featureLocations,setFeatureLocations] = useState([]);
+
+    // useEffect(()=>{
+    //     if(!origin || !destination) return;
+
+    //     mapRef.current.fitToSuppliedMarkers(['Origin', 'Destination'], {
+    //         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+    //     });
+    // }, [origin, destination])
+
+    //Correct//
+
+    const getCurrentLocation = async()=>{
+        const {granted} = await Location.requestForegroundPermissionsAsync();
+        if(granted){
+            const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
+            setCurrentLocation({
+              latitude,
+              longitude,
+            })
+        }
+    }
 
 
 
+    React.useLayoutEffect(() => {
+        getLocationPermission();
+        getCurrentLocation()
+        getFeatureLocations()
+        
+        socket.on("clearLocations",({id})=>{
+        //    setFeatureLocations([]);
+        // console.log(id);
+        // const locations = featureLocations.filter((location)=>{
+        //     console.log("location id",location.id===id);
+        //     return location.id !== id
+        // });
+        // // console.log("newLocations after delete",locations);
+        // setFeatureLocations(locations);
+        // })
+        getFeatureLocations();
+        })
 
+        
+        // return () => {
+        //     socket.off("locationAdded");
+        //     socket.off("clearLocations");
+        // }
+    }, []);
 
+    useEffect(() => {
+      socket.on("locationAdded",(data)=>{
+        console.log(data)
+        console.log("socket new data feature locations",featureLocations);
+        const newLocations = featureLocations || [];
+        const newData = {
+            id: data.id,
+            lat: data.lat,
+            lng: data.lng,
+            feature: data.feature
+        }
+        newLocations.push(newData); //rwact useState not working
+        console.log("socket new locations",newLocations)
+        setFeatureLocations(newLocations);
+    })
 
+    return ()=>{
+        socket.off("locationAdded");
+    }
+    }, [featureLocations]);
 
+    async function getFeatureLocations(){
+        const response = await axios.get(`${API_URL}/location`);
+       setFeatureLocations([])
+        setFeatureLocations(response.data);
 
+    }
 
+    async function getLocationPermission(){
+        let {status} = await Location.requestForegroundPermissionsAsync();
+        if(status !== 'granted'){
+            alert('Permission to access location was denied');
+            return;
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        const current = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+        }
+        // origin.latitude = current.latitude;
+        // origin.longitude = current.longitude;
+    }
 
+    //Wrong//
 
+    const [currentLocation, setCurrentLocation] = useState(null);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Correct
-
-// import React, { useState, useEffect } from 'react';
-// import { Platform, Text, View, StyleSheet } from 'react-native';
-// import * as Location from 'expo-location';
-// import MapView from 'react-native-maps';
-// import { Marker } from 'react-native-maps';
- 
-// export default function App() {
-//   const [currentLocation, setCurrentLocation] = useState(null);
-
-//   useEffect(() => {
-//     (async () => {
-      
-//       let { status } = await Location.requestForegroundPermissionsAsync();
-//       if (status == 'granted') {
-//         console.log('Permission granted');
-//       }
-//       else{
-//         console.log('Permission denied');
-//       }
-
-//       const currentLocation = await Location.getCurrentPositionAsync({});
-//       setCurrentLocation(currentLocation);
-//     })();
-//   }, []);
-
-//   return (
-//     <View>
-//       <Text>{JSON.stringify(currentLocation)}</Text>
-      
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({}); 
-
-
-//////////////////
-
-
-// import React, { useState, useEffect } from 'react';
-// import { View, Text, StyleSheet } from 'react-native';
-// import MapView, { Marker } from 'react-native-maps';
-// import Geolocation from '@react-native-community/geolocation';
-
-// const App = () => {
-//   const [location, setLocation] = useState({
-//     latitude: 0,
-//     longitude: 0,
-//   });
-
-//   useEffect(() => {
-//     Geolocation.getCurrentPosition(
-//       (position) => {
-//         setLocation({
-//           latitude: position.coords.latitude,
-//           longitude: position.coords.longitude,
-//         });
-//       },
-//       (error) => console.error(error),
-//       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-//     );
-//   }, []);
-
-//   return (
-//     <View style={styles.container}>
-//       <MapView
-//         style={styles.map}
-//         initialRegion={{
-//           latitude: location.latitude,
-//           longitude: location.longitude,
-//           latitudeDelta: 0.0922,
-//           longitudeDelta: 0.0421,
-//         }}
-//       >
-//         <Marker
-//           coordinate={{
-//             latitude: location.latitude,
-//             longitude: location.longitude,
-//           }}
-//           title="Current Location"
-//         />
-//       </MapView>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     ...StyleSheet.absoluteFillObject,
-//     height: 400,
-//     width: 400,
-//     justifyContent: 'flex-end',
-//     alignItems: 'center',
-//   },
-//   map: {
-//     ...StyleSheet.absoluteFillObject,
-//   },
-// });
-
-// export default App;
-
-///////////////
-
-
-// import { ImageBackground, StyleSheet, Text, View, TouchableOpacity,Image,SafeAreaView } from 'react-native'
-// import React from 'react'
-// import LandingBackground from '../components/authentication/LandingBackground';
-// import { Button } from 'react-native-elements';
-// import tw from 'tailwind-react-native-classnames';
-// import Buttons from '../components/authentication/Buttons';
-
-// const ViewMap = (nv) => {
-//   return (
+//     useEffect(() => {
   
-//     <SafeAreaView>
+//         const unsubscribe =  setInterval(() => {
+//             (async () => {
+              
+//               let { status } = await Location.requestForegroundPermissionsAsync();
+//               if (status == 'granted') {
+//                 console.log('Permission granted');
+//               }
+//               else{
+//                 console.log('Permission denied');
+//               }
+        
+//               const currentLocation = await Location.getCurrentPositionAsync({});
+//               setCurrentLocation({
+//                 ...origin,
+//                 lat: currentLocation.coords.latitude,
+//                 lng: currentLocation.coords.longitude,
+//               });
 
-//           <View style={tw`flex-row px-6 mt-10 items-center`}>
-//                 <View style={tw`w-16 h-16 bg-black rounded-full items-center justify-center`}>
-//                     <Text style={tw`text-blue-300 text-4xl font-semibold`}>Eff</Text>
-//                 </View>
-                
-//                     <Text style={tw`text-black text-3xl font-semibold`}>Road</Text>
-                
-//             </View>
-
-//             <View style={tw`px-6 mt-10`}>
-//                 <Text style={tw`text-black text-4xl font-bold`}>Simplify your journey</Text>
-                
-//                 {/* <Text style={tw`text-lg mt-5 font-bold`}>Welcome</Text> */}
-//                 <Text>The smarter way to navigate. Our app offers real-time updates, turn-by-turn directions, and a range of features to help you get to your destination with ease. With our customizable map views, voice-activated commands, and hands-free operation, you can focus on the road ahead and leave the rest to us.</Text>
-//             </View>
-
-//           {/* <View style={tw` w-64 h-64 bg-blue-300 rounded-full absolute top-52 -right-28 opacity-50`}></View>
-//             <View style={tw`w-64 h-64 bg-red-300 rounded-full absolute top-80 -left-20 opacity-50`}></View> */}
-// <TouchableOpacity
-//             onPress={()=>nv.navigation.navigate("Login")}
-//             >
-//             <View style={tw`mx-auto w-52 h-10 items-center justify-center bg-black mt-8 shadow-2xl rounded-lg`}>
-//              <Text style={tw`text-gray-50 text-xl font-semibold `}>Log in to EffRoad</Text>                
-//             </View>
-//             </TouchableOpacity>
-//             <View style={tw` mx-auto relative items-center justify-center mt-16`}>
+        
+    
+//               setOrigin({...origin,location:{
+//                   lat: currentLocation.coords.latitude,
+//                   lng: currentLocation.coords.longitude
+//                 }});
+//                 originRef.current?.animateMarkerToCoordinate({
+//                     latitude: currentLocation.coords.latitude,
+//                     longitude: currentLocation.coords.longitude,
+//                     latitudeDelta: 0.0922,
+//                     longitudeDelta: 0.0421,
+//                 },7000);
+//                 // originRef.current?.redraw();
+//             })();
             
-//                 <Image
-
-//                     source={require("./frontmap.png")}
-//                     style={tw`w-96 h-72`}
-//                 />
-            
-            
-//           </View>
-          
-//     </SafeAreaView>
-//   )
-// }
-
-// export default ViewMap
-
-// const styles = StyleSheet.create({})
+//         }, 10000);
+//         console.log(originRef.current);
+//     return () => clearInterval(unsubscribe);    
+// }, [originRef]);
 
 
+  return (
+    <>
+    {!currentLocation && <ActivityIndicator
+    size={50}
+    color="#EF5350"
+    style={
+      {
+        flex:1,
+        backgroundColor: 'white'
+      }
+    }
+    />}
+    {currentLocation &&
+      ( 
+      <MapView
+    ref={mapRef}
+        style={tw`flex-1 pt-8`}
+        mapType="mutedStandard"
+        initialRegion={{
+            // latitude: 6.8625,
+            // longitude: 79.8855,
+            latitude: currentLocation?.latitude,
+            longitude: currentLocation?.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+        }}
+    >
+       
+
+        {featureLocations.map((location,index) => {
+            const feature = location.feature
+            let image=""
+            if(feature === "Accident"){
+                image = mapImages.Accident
+            }
+            else if(feature === "Police"){
+                image = mapImages.Police
+            }
+            else if(feature === "Emergency"){
+                image = mapImages.Emergency
+            }
+            else if(feature === "RoadsideHelp"){
+                image = mapImages.RoadsideHelp
+            }
+            else if(feature === "RoadClosure"){
+                image = mapImages.RoadClosure
+            }
+            else if(feature === "Traffic"){
+                image = mapImages.Traffic
+            }
+            return (
+                <Marker
+                    identifier={location.feature}
+                    key={index}
+                    coordinate={{
+                        latitude:parseFloat(location.lat),
+                        longitude:parseFloat(location.lng),
+                    }}
+                    title={location.feature}>
+                    <Image source={image} style={{width: 40, height: 40}}/>
+                    </Marker>
+                    
+                
+            )
+        })}
+
+
+        
+
+        
+    </MapView>
+      )
+    }
+    
+    </>
+
+  );
+  
+};
+
+
+export default ViewMap;

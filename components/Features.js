@@ -180,7 +180,7 @@ await axios.post(API_URL+"/location",{
         </View>
 
         <TouchableOpacity
-            onPress={() => navigation.navigate('ViewMap')}
+            onPress={() => navigation.navigate('Home')}
         >
             <Text style={tw`text-sm bg-red-500 px-6 py-1 rounded-full text-gray-200 font-semibold shadow-2xl`}>End Journey</Text>
         </TouchableOpacity>

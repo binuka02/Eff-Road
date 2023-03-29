@@ -4,7 +4,7 @@
     "slug": "Final-Project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.jpg",
+    "icon": "./assets/Logo.jpg",
     "jsEngine": "hermes",
     "userInterfaceStyle": "light",
     "splash": {
