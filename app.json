@@ -4,11 +4,11 @@
     "slug": "Final-Project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logo.jpg",
+    "icon": "./assets/appicon.jpg",
     "jsEngine": "hermes",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Logo.jpg",
+      "image": "./assets/logo.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,12 +23,20 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/appicon.jpg",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
+    ]
   }
 }

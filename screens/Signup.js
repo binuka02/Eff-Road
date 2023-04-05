@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'
 import {View, Text, Alert, Touchable, TouchableOpacity, Image,KeyboardAvoidingView} from 'react-native';
 import LandingBackground from '../components/authentication/LandingBackground';
 import Buttons from '../components/authentication/Buttons';
@@ -18,6 +18,9 @@ const Signup = props => {
     username: "",
     confirmPassword: ""
       })
+
+
+      const [isLoading,setIsLoading] = useState(false)
 
       const validateEmail = (email) => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,6 +82,16 @@ const Signup = props => {
           source={require("../assets/signup.jpg")}
           style={tw`w-72 h-44`}
         />
+
+{isLoading && <ActivityIndicator
+    size={50}
+    color="#EF5350"
+    style={
+      {
+        backgroundColor: 'white'
+      }
+    }
+    />}
 
             <Text style={{fontSize: 40, color:'#090A2E', fontWeight: 'bold'}}>
           Welcome 

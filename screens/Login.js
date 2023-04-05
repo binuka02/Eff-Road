@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Alert, ActivityIndicator } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import LandingBackground from '../components/authentication/LandingBackground'
 import Buttons from '../components/authentication/Buttons';
 import Field from '../components/authentication/Field';
@@ -17,11 +17,38 @@ email: "",
 password: ""
   });
 
+  const [isLoading,setIsLoading] = useState(false)
+
 
   const validateEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
+
+  const resetPassword = async()=>{
+    if (state.email === "") {
+      Alert.alert('Missing Fields!', 'Be sure to enter the email');
+      return;
+    }
+
+    else if ( !validateEmail(state.email)){
+      Alert.alert('Invalid Email!', 'Be sure entered email is correct');
+      return;
+    }
+
+    try {
+      setIsLoading(true)
+      const response = await axios.post(API_URL+"/auth/reset-password",{
+        email: state.email
+      })
+      Alert.alert('Success', 'Email has been sent');
+      setIsLoading(false)
+    }
+    catch(error){
+      Alert.alert('Error', error.response.data.error);
+      console.log(error);
+    }
+  }
   
 
   const loginUser = async () => {
@@ -37,10 +64,12 @@ password: ""
     }
 
     try {
+      setIsLoading(true)
       const response = await axios.post(API_URL+"/auth/login",{
         email: state.email,
         password: state.password
       })
+      setIsLoading(false)
 
 
       console.log(response.data);
@@ -56,24 +85,17 @@ password: ""
 
   }
   return (
+    <>
     
+   
     <KeyboardAvoidingView
     behavior='position'
   
     style={{flex:1, backgroundColor:'white'}}
     >
 
-{!loginUser && <ActivityIndicator
-    size={50}
-    color="#EF5350"
-    style={
-      {
-        flex:1,
-        backgroundColor: 'white'
-      }
-    }
-    />}
-    <View
+
+    {<View
         style={{
           backgroundColor: 'white',
           height: '100%',
@@ -86,6 +108,15 @@ password: ""
           source={require("../assets/login.jpg")}
           style={tw`w-72 h-72`}
         />
+        {isLoading && <ActivityIndicator
+    size={50}
+    color="#EF5350"
+    style={
+      {
+        backgroundColor: 'white'
+      }
+    }
+    />}
 
         <Text style={{fontSize: 40, color:'#090A2E', fontWeight: 'bold', marginTop:40}}>
           Welcome Back
@@ -108,6 +139,10 @@ password: ""
         <Field placeholder="Password" secureTextEntry={true} value={state.password} onChangeText={(value)=>{
           setState({...state, password: value})
         }} />
+
+        <TouchableOpacity onPress={resetPassword}>
+          <Text style={tw`text-red-400 font-semibold text-xs`}>Forgot Password?</Text>
+        </TouchableOpacity>
 
         <View
           style={{alignItems: 'flex-end', width: '78%', paddingRight: 16}}>
@@ -133,8 +168,9 @@ password: ""
           <Text style={tw`text-red-500 font-semibold text-sm`}>Signup</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View>}
           </KeyboardAvoidingView>
+          </>
 );
 };
 

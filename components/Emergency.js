@@ -1,42 +1,97 @@
 import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
+import { getNearbyPlace } from '../util/location';
 
-const Emergency = () => {
+const Emergency = ({route}) => {
     const navigation = useNavigation();
 
     const nearHospitals = () => {
-      const url = 'https://www.google.com/maps/search/hospital/@6.8692024,79.8845187,13z?hl=en';
+      const url = `https://www.google.com/maps/search/hospital/@${route.params.origin.latitude},${route.params.origin.longitude},13z?hl=en`;
       Linking.openURL(url);
+
     };
+
+    const nearGarages= () => {
+      const url = `https://www.google.com/maps/search/garage/@${route.params.origin.latitude},${route.params.origin.longitude},13z?hl=en`;
+      Linking.openURL(url);
+
+    };
+
+    const [nearbyHospital,setNearbyHospital] = useState(null)
+    const [nearbyGarage,setNearbyGarage] = useState(null)
+
+    useEffect(()=>{
+      console.log(route.params)
+      const init = async()=>{
+        const data = await getNearbyPlace("hospital",route.params.origin)
+        setNearbyHospital(data)
+        const dataPolice = await getNearbyPlace("garage",route.params.origin)
+        setNearbyGarage(dataPolice)
+
+      }
+
+      init();
+    },[])
 
   return (
     <View style={styles.container}>
-                <Text style={tw`mt-6 font-bold text-xl`}>Nearest</Text>
+                <Text style={tw`mt-10 font-bold text-xl`}>Nearest</Text>
 
         <View style={styles.boxContain}>
             <View style={styles.box}>
                 <View style={tw` my-auto mx-auto items-center`}>
-                    <Text style={tw`font-semibold text-base`}>Hospital</Text> 
-                    <Text style={tw` `}>ABC</Text> 
-                    <TouchableOpacity
-                    onPress={nearHospitals}
-                    >
-                      <Text style={tw`text-red-400 text-xs font-semibold`}>View More</Text>
-                    </TouchableOpacity>
+                    <Text style={tw`font-semibold text-lg`}>Hospital</Text> 
                 </View>
             </View>
             <View style={styles.box}>
                 <View style={tw` my-auto mx-auto items-center`}>
-                    <Text style={tw`font-semibold text-base`}>Garage</Text> 
-                    <Text style={tw``}>XYZ</Text>        
+                <Text style={tw`font-semibold text-lg`}>Garage</Text> 
+
+                </View>
+            </View>
+            <View style={styles.box2}>
+                <View style={tw` my-auto mx-auto items-center`}>
+                  <Text style={tw`text-base`}>{nearbyHospital?.place}</Text>
+                  <Text>{nearbyHospital?.phNo}</Text>                    
+                </View>
+            </View>
+            <View style={styles.box2}>
+                <View style={tw` my-auto mx-auto items-center`}>
+                <Text>{nearbyGarage?.place}</Text>
+                    {!nearbyGarage?.place && <Text>No any nearby Garages..</Text>}
+                    <Text>{nearbyGarage?.phNo}</Text>                
+                  </View>
+            </View>
+            <View style={styles.box}>
+                <View style={tw` my-auto mx-auto items-center`}>
+
                     <TouchableOpacity
-                    
+                    onPress={nearHospitals}
+                    style={tw`my-auto mx-auto items-center`}
+
                     >
-                      <Text style={tw`text-red-400 text-xs font-semibold`}>View More</Text>
+                      <Text style={tw`text-red-400 text-xs font-semibold`}>View More </Text>
+                      {/* <Text style={tw`text-red-400 text-xs font-semibold`}>Hospitals</Text> */}
+
+                    </TouchableOpacity>
+                   
+                </View>
+            </View>
+            <View style={styles.box}>
+                <View style={tw` my-auto mx-auto items-center`}>
+
+                <TouchableOpacity
+                    onPress={nearGarages}
+                    style={tw`my-auto mx-auto items-center`}
+                    >
+                      <Text style={tw`text-red-400 text-xs font-semibold`}>View More </Text>
+                      {/* <Text style={tw`text-red-400 text-xs font-semibold`}>Garages</Text> */}
+
                     </TouchableOpacity>    
-               </View>
+                    
+                </View>
             </View>
         </View>
         <TouchableOpacity
@@ -63,6 +118,7 @@ const styles = StyleSheet.create({
   
   },
     boxContain: {
+      marginTop:30,
        width: '80%',
        height: '80%',
        backgroundColor: 'white',
@@ -72,9 +128,15 @@ const styles = StyleSheet.create({
 
     box: {
       width: '50%',
-      height: '30%',
+      height: '15%',
       backgroundColor: 'white',
    },
+
+   box2: {
+    width: '50%',
+    height: '25%',
+    backgroundColor: 'white',
+ },
   
    inner:{
      flex:1,
@@ -82,20 +144,29 @@ const styles = StyleSheet.create({
      justifyContent: 'center', 
      alignItems: 'center', 
    } ,
-//    image:{
-  
-//     width: 50,
-//     height: 50,
-//     resizeMode: 'contain',
-//     flexDirection: 'row',
-//     justifyContent: 'flex-end'
-//    },
-  
-   txt:{
-      fontSize: 17,
-      fontWeight: 'bold',
-      color: 'black',
+
+
+   camera:{
+    flex:1,
+    width:'80%',
+    height:'80%',
+    justifyContent:'flex-end',
+    alignItems:'center',
+    
    },
+
+   text:{
+        color:'white'
+
+   }
+  
+
   
   
    });
+
+
+
+
+
+
