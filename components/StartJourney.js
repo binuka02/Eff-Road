@@ -3,13 +3,14 @@ import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from 'tailwind-react-native-classnames'
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux'
-import { selectOrigin, selectDestination } from '../slices/navSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectOrigin, selectDestination, toggleStartClicked } from '../slices/navSlice'
 import axios from 'axios';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDistanceDuration } from '../util/location';
 import { useState } from 'react';
+
 
 
 
@@ -25,6 +26,7 @@ const StartJourney = () => {
   const [user,setUser] = React.useState(null);
   const [distance,setDistance] = useState("")
   const [duration,setDuration] = useState("")
+ const dispatch = useDispatch();
 
   console.log(origin);
 
@@ -110,6 +112,8 @@ const StartJourney = () => {
           <View style={tw` my-auto mx-auto pt-4 h-12 items-center `}>
           <TouchableOpacity
         onPress={() => {navigation.navigate('Features');
+
+        dispatch(toggleStartClicked())
       axios.post(API_URL+"/originDestination",{
         origin: origin?.description,
         destination: destination?.description,
