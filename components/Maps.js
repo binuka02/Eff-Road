@@ -4,7 +4,7 @@ import tw from 'tailwind-react-native-classnames';
 import * as Location from 'expo-location';
 import MapView, {Marker} from 'react-native-maps';
 import { useSelector } from 'react-redux';
-import { selectDestination, selectOrigin,setOrigin } from '../slices/navSlice';
+import { selectDestination, selectOrigin,selectStartClicked,setOrigin, toggleStartClicked } from '../slices/navSlice';
 import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useRef } from 'react';
@@ -36,6 +36,7 @@ const Maps = () => {
     const origin = useSelector(selectOrigin);
     const mapRef = useRef(null);
     const originRef = useRef(null);
+    const startClicked = useSelector(selectStartClicked)
 
     const [featureLocations,setFeatureLocations] = useState([]);
 
@@ -73,30 +74,24 @@ const Maps = () => {
 
 
     React.useLayoutEffect(() => {
-        getLocationPermission();
-        getFeatureLocations()
-        socket.on("clearLocations",({id})=>{
-        //    setFeatureLocations([]);
-        // console.log(id);
-        // const locations = featureLocations.filter((location)=>{
-        //     console.log("location id",location.id===id);
-        //     return location.id !== id
-        // });
-        // // console.log("newLocations after delete",locations);
-        // setFeatureLocations(locations);
-        // })
-        getFeatureLocations();
+        socket.on("clearLocation",({id})=>{
+        console.log(id);
+        const locations = featureLocations.filter((location)=>{
+            console.log("location id",location.id===id);
+            return location.id !== id
+        });
+        // console.log("newLocations after delete",locations);
+        setFeatureLocations(locations);
         })
+
+       
 
         
         return () => {
-            socket.off("clearLocations");
+            socket.off("clearLocation");
         }
-    }, []);
-
-    useEffect(() => {
-        console.log("location",featureLocations);
     }, [featureLocations]);
+
 
     async function getFeatureLocations(){
         const response = await axios.get(`${API_URL}/location`);
@@ -125,44 +120,52 @@ const Maps = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
 
     useEffect(() => {
-  
-        const unsubscribe =  setInterval(() => {
-            (async () => {
+        console.log("startClicked",startClicked)
+        if(!startClicked) return;
+        const unsubscribe =  setInterval(async() => {
+            await (async () => {
               
               let { status } = await Location.requestForegroundPermissionsAsync();
               if (status == 'granted') {
-                console.log('Permission granted');
+                // console.log('Permission granted');
               }
               else{
                 console.log('Permission denied');
               }
         
               const currentLocation = await Location.getCurrentPositionAsync({});
+
               setCurrentLocation({
                 ...origin,
                 lat: currentLocation.coords.latitude,
                 lng: currentLocation.coords.longitude,
               });
 
+
+            
         
     
               setOrigin({...origin,location:{
                   lat: currentLocation.coords.latitude,
                   lng: currentLocation.coords.longitude
                 }});
-                originRef.current?.animateMarkerToCoordinate({
-                    latitude: currentLocation.coords.latitude,
-                    longitude: currentLocation.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                },7000);
-                // originRef.current?.redraw();
+                // originRef.current?.animateMarkerToCoordinate({
+                //     latitude: currentLocation.coords.latitude,
+                //     longitude: currentLocation.coords.longitude,
+                //     latitudeDelta: 0.0922,
+                //     longitudeDelta: 0.0421,
+                // },7000);
+            //     // originRef.current?.redraw();
             })();
             
-        }, 10000);
-        console.log(originRef.current);
-    return () => clearInterval(unsubscribe);    
-}, [originRef]);
+        }, 1000);
+    return () => {
+        toggleStartClicked()
+        clearInterval(unsubscribe)
+    };    
+}, [startClicked]);
+
+const directionRef = useRef(null)
 
 
   return (
@@ -171,6 +174,7 @@ const Maps = () => {
     ref={mapRef}
         style={tw`flex-1`}
         mapType="mutedStandard"
+        showsUserLocation={true}
         initialRegion={{
             // latitude: 6.8625,
             // longitude: 79.8855,
@@ -182,12 +186,18 @@ const Maps = () => {
     >
         {origin && destination &&  (
             <MapViewDirections
-                location={origin.location}
-                origin={origin.description}
+                // location={'Las Vegas, NV, USA'}
+                origin={{
+                    latitude: currentLocation ? currentLocation.lat : origin.location.lat,
+                    longitude:currentLocation ? currentLocation.lng : origin.location.lng,
+                }}
                 destination={destination.description}
                 apikey={GOOGLE_MAPS_APIKEY}
                 strokeWidth={5}
                 strokeColor="black"
+                ref={directionRef}
+                resetOnChange={true}
+                
 
                 // onReady={result => {
                 //     setDistanceDuration({
@@ -197,7 +207,6 @@ const Maps = () => {
                 //   }}
             />
         )}
-
 
 
         {destination?.location && (
@@ -223,8 +232,8 @@ const Maps = () => {
             <Marker.Animated
             ref={originRef}
                 coordinate={{
-                    latitude: origin.location.lat,
-                    longitude: origin.location.lng,
+                    latitude: currentLocation ? currentLocation.lat : origin.location.lat,
+                    longitude:currentLocation ? currentLocation.lng : origin.location.lng,
                 }}
                 title="Origin"
                 description={origin.description}

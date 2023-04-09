@@ -7,6 +7,7 @@ import axios from 'axios'
 import { API_URL } from '@env'; 
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
+import Camera from './Camera';
 
 
 const Features = () => {
@@ -21,10 +22,24 @@ const Features = () => {
     })
 
     const [mapLoaded, setMapLoaded] = useState(false);
+    const [currentLocation,setCurrentLocation] = useState(null)
+
+    const [openCamera,setOpenCamera] = useState(false)
 
     const handleMapLayout = () => {
         setMapLoaded(true);
     };
+
+    useEffect(()=>{
+        const init = async()=>{
+            const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+            setCurrentLocation({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+            })
+        }
+        init()
+    },[])
     
   const userLocation = async (feature) => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -33,6 +48,10 @@ const Features = () => {
         return;
     }
     const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+    setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+    })
 await axios.post(API_URL+"/location",{
     lat: location.coords.latitude,
     lng: location.coords.longitude,
@@ -49,6 +68,8 @@ await axios.post(API_URL+"/location",{
     // console.log(location.coords.latitude, location.coords.longitude);
     }
 
+   
+
     
   return (
     <View style={styles.container}>
@@ -57,6 +78,8 @@ await axios.post(API_URL+"/location",{
         onLayout={handleMapLayout}>
             <Marker coordinate={mapRegion} />
         </MapView> */}
+
+{openCamera && currentLocation && <Camera currentLocation={currentLocation}/>}
 
         
         
@@ -90,7 +113,7 @@ await axios.post(API_URL+"/location",{
             <View style={styles.box}>
                 <View style={styles.inner}>
                     <TouchableOpacity 
-                        onPress={() => navigation.navigate('Emergency')}
+                        onPress={() => navigation.navigate('Emergency',{origin:currentLocation})}
                         title="Emergency"
                         style={tw`items-center `}
                     >    
@@ -179,11 +202,36 @@ await axios.post(API_URL+"/location",{
           
         </View>
 
-        <TouchableOpacity
-            onPress={() => navigation.navigate('Home')}
-        >
-            <Text style={tw`text-sm bg-red-500 px-6 py-1 rounded-full text-gray-200 font-semibold shadow-2xl`}>End Journey</Text>
-        </TouchableOpacity>
+        
+
+        
+       
+        {/* <Camera/> */}
+
+        <View style={styles.boxContain2}>
+            <View style={styles.box2}>
+                <View style={styles.inner2}>
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate('Home')}
+                    >
+                        <Text style={tw`text-sm bg-red-500 px-6 py-1 rounded-full text-gray-200 font-semibold shadow-2xl`}>End Journey</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.box2}>
+                <View style={styles.inner2}>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            setOpenCamera(!openCamera)
+                        }}
+                    >
+                        <Text style={tw`text-sm bg-blue-400 px-6 py-1 rounded-full text-gray-200 font-semibold shadow-2xl`}>
+                            {openCamera ? "Close Camera" : "Open Camera"}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
 
     </View>
 
@@ -224,6 +272,28 @@ const styles = StyleSheet.create({
      justifyContent: 'center', 
      alignItems: 'center', 
    } ,
+
+   boxContain2: {
+    width: '80%',
+    height: '10%',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 5,
+ },
+
+ box2: {
+   width: '50%',
+   backgroundColor: 'white',
+   
+},
+
+inner2:{
+  flex:1,
+  backgroundColor: 'white',
+  justifyContent: 'center', 
+  alignItems: 'center', 
+} ,
 
   
    });
