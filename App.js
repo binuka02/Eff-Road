@@ -57,10 +57,10 @@ const [initialRoute, setInitialRoute] = useState('Login')
           tabBarStyle: {
             backgroundColor: '#e8e8e8',
             flexDirection: 'row',
-            width: '92%',
-            borderRadius: 20,
-            marginTop:10,
-            marginBottom:10,
+            width: '90%',
+            borderRadius: 25,
+            // marginTop:10,
+            marginBottom:20,
             paddingLeft:50,
             paddingRight:50
         },

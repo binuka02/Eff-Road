@@ -15,7 +15,7 @@ const HomeScreen = () => {
     const dispatch = useDispatch();
     return (
         <SafeAreaView style={tw`bg-white h-full`}>
-            <View style={tw`flex-row px-6 mt-10 items-center`}>
+            <View style={tw`flex-row  mt-10 items-center`}>
                 <View style={tw`w-16 h-16 bg-black rounded-full items-center justify-center`}>
                     <Text style={tw`text-red-400 text-4xl font-semibold`}>Eff</Text>
                 </View>
@@ -24,7 +24,7 @@ const HomeScreen = () => {
                 
             </View>
 
-            <View style={tw`px-6 mt-6`}>
+            <View style={tw` mt-6`}>
                 <Text style={tw`text-3xl`}>Enjoy your journey with</Text>
                 <Text style={tw`text-red-400 text-2xl font-bold`}>Good Moments</Text>
                 {/* <Text style={tw`text-lg mt-5 font-bold`}>Welcome</Text> */}
@@ -37,7 +37,7 @@ const HomeScreen = () => {
                     styles={{
                         container:{
                             flex:0,
-                            marginLeft:13,
+                            marginLeft:0,
                             marginTop:15,
                             zIndex:39,
                         },
@@ -71,12 +71,12 @@ const HomeScreen = () => {
             {/* <View style={tw`z-40 opacity-60 w-72 h-72 bg-red-300 rounded-full absolute top-1/2 -right-36`}></View>
             <View style={tw`w-72 h-72 opacity-60 bg-red-300 rounded-full absolute top-3/4 -left-28`}></View> */}
 
-            <View style={tw`z-50 relative items-center justify-center top-6`}>
+            <View style={tw`z-50 relative items-center justify-center `}>
                 <Image
                 // animation="fadeIn"
                 // easing="ease-out"
                     source={require("../assets/map.jpg")}
-                    style={tw`w-96 py-10 h-72`}
+                    style={{width: '100%', height: 300, resizeMode: "contain"}}
                 />
                
             </View>
