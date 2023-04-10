@@ -53,15 +53,15 @@ const Emergency = ({route}) => {
             </View>
             <View style={styles.box2}>
                 <View style={tw` my-auto mx-auto items-center`}>
-                  <Text style={tw`text-base`}>{nearbyHospital?.place}</Text>
-                  <Text>{nearbyHospital?.phNo}</Text>                    
+                  <Text style={tw`text-sm`}>{nearbyHospital?.place}</Text>
+                  <Text>{"\n"}Tel: {nearbyHospital?.phNo}</Text>                    
                 </View>
             </View>
             <View style={styles.box2}>
                 <View style={tw` my-auto mx-auto items-center`}>
                 <Text>{nearbyGarage?.place}</Text>
                     {!nearbyGarage?.place && <Text>No any nearby Garages..</Text>}
-                    <Text>{nearbyGarage?.phNo}</Text>                
+                    <Text>{"\n"}Tel: {nearbyGarage?.phNo}</Text>                
                   </View>
             </View>
             <View style={styles.box}>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 
    box2: {
     width: '50%',
-    height: '25%',
+    height: '40%',
     backgroundColor: 'white',
  },
   

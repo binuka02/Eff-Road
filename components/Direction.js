@@ -15,6 +15,16 @@ import { KeyboardAvoidingView } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
+const SeperatorStyle = {
+  height: 1,
+  backgroundColor: '#e2e2e2',
+  width: '90%',
+  alignSelf: 'center',
+  marginBottom: 20
+}
+
+const Seperator = () => <View style={SeperatorStyle} />
+
 const Direction = () => {
 
   const [currentLocation, setCurrentLocation] = React.useState('');
@@ -91,7 +101,7 @@ const Direction = () => {
       <KeyboardAvoidingView>
         {user && <Text style={tw`text-center py-2 text-xl font-semibold mt-0`}>Hi, {user.firstName +" " +user.lastName}!👋</Text>}
         {/* <Text>{destination(0)}</Text> */}
-        <View style={tw`border-t border-gray-200 flex-shrink`}>
+        <Seperator/>
           
           <View>
             <GooglePlacesAutocomplete
@@ -102,7 +112,7 @@ const Direction = () => {
                     flex:0,
                     marginLeft:10,
                     marginRight:10,
-                    marginTop:15,
+                    
                 },
                 textInput:{
                     fontSize:18,
@@ -142,10 +152,10 @@ const Direction = () => {
           <TouchableOpacity
           onPress={getLocationPermission}
           >
-            <Text style={tw`text-gray-400 font-semibold mx-auto text-sm`}>From Here</Text>
+            <Text style={tw`text-gray-400 font-semibold mx-auto text-sm`}>Current Location</Text>
           </TouchableOpacity>
         
-        </View>
+        
 
         
 
