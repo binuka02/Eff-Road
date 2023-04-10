@@ -62,8 +62,8 @@ const StartJourney = () => {
 
 
   const SeperatorStyle = {
-    height: 2,
-    backgroundColor: '#8f8f8f',
+    height: 1,
+    backgroundColor: '#e2e2e2',
     width: '100%',
     alignSelf: 'center',
     marginBottom: 5,
@@ -179,7 +179,7 @@ export default StartJourney
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 50,
+     
       shadowOffset: {width: -2, height: 4},  
     shadowColor: '#171717',  
   

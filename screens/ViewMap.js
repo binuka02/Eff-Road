@@ -103,6 +103,9 @@ const ViewMap = () => {
         setFeatureLocations(newLocations);
     })
 
+
+    
+
     return ()=>{
         socket.off("locationAdded");
     }
@@ -175,23 +178,43 @@ const ViewMap = () => {
 // }, [originRef]);
 
 
+const SeperatorStyle = {
+    height: 1,
+    backgroundColor: '#d1d1d1',
+    width: '80%',
+    alignSelf: 'center',
+    marginBottom: 5,
+    marginTop: 7
+  }
+  
+  const Seperator = () => <View style={SeperatorStyle} />
+
   return (
-    <>
+    <View style={tw`flex-1 bg-white`}>
+
+<View style={tw`mt-12 items-center justify-center`}>
+        <Text style={tw`text-xl font-semibold shadow-2xl`}>Map View</Text>
+        <Text style={tw`text-xs text-gray-500 mt-4 text-center`}>Here is the map which is showing the dropped pins by other EffRoad users to report traffic related incidents like 'Accidents', 'Road Closures', 'Traffics', 'Roadside Helps' & 'Police Inspectors'. You can also contribute to this when you using our navigation map..</Text>
+        </View>
+
+{/* <Seperator/> */}
     {!currentLocation && <ActivityIndicator
     size={50}
     color="#EF5350"
     style={
       {
         flex:1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
       }
     }
     />}
     {currentLocation &&
       ( 
+
+        
       <MapView
     ref={mapRef}
-        style={tw`flex-1 pt-8`}
+        style={tw`flex-1 mt-8 mb-8`}
         mapType="mutedStandard"
         initialRegion={{
             // latitude: 6.8625,
@@ -249,7 +272,7 @@ const ViewMap = () => {
       )
     }
     
-    </>
+    </View>
 
   );
   

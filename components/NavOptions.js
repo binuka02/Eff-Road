@@ -16,6 +16,8 @@ const pages = [
 
 ];
 
+
+
 // const pages2 = [
 
 //     {
@@ -41,7 +43,6 @@ const NavOptions = () => {
 
     return(
        
-        // <View style={tw`z-50 relative mx-auto bottom-4 w-20 h-20 border-l-2 border-r-2 border-t-4 border-black rounded-full items-center justify-center mt-8`}>
         
                     <TouchableOpacity 
                     
@@ -52,13 +53,16 @@ const NavOptions = () => {
                     >    
                     
                         {/* <View style={tw`${!destination && "opacity-20"}`}> */}
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-700 shadow-2xl mt-8`}>
+                        <View style={tw`z-50 relative mx-auto bottom-4 w-20 h-20 border-l-2 border-r-2 border-t-4 border-black rounded-full items-center justify-center mt-8`}>
+        
+                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-700 shadow-2xl `}>
                             <Text style={tw`text-gray-200 text-3xl font-semibold shadow-2xl`}>Go</Text>                
+                        </View>
                         </View>
                     </TouchableOpacity>
                 
     
-        // </View>
+        
     );
 };
 
