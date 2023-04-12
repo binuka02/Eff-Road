@@ -52,8 +52,7 @@ const Maps = () => {
 
     useEffect(() => {
         socket.on("locationAdded",(data)=>{
-          console.log(data)
-          console.log("socket new data feature locations",featureLocations);
+        
           const newLocations = featureLocations || [];
           const newData = {
               id: data.id,
@@ -91,6 +90,10 @@ const Maps = () => {
             socket.off("clearLocation");
         }
     }, [featureLocations]);
+
+    useEffect(()=>{
+        getFeatureLocations();
+    },[])
 
 
     async function getFeatureLocations(){

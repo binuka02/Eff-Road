@@ -41,7 +41,7 @@ const Seperator2 = () => <View style={Seperator2Style} />
 export default function Account({navigation}){
 
   const logout = async()=>{
-    await AsyncStorage.clear()
+    await AsyncStorage.removeItem("user")
     navigation.navigate('Login')
   }
 
