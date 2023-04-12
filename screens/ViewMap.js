@@ -37,7 +37,7 @@ const ViewMap = () => {
     const mapRef = useRef(null);
     const originRef = useRef(null);
 
-    const [featureLocations,setFeatureLocations] = useState([]);
+    const [featureLocations,setFeatureLocations] = useState(null);
 
     // useEffect(()=>{
     //     if(!origin || !destination) return;
@@ -49,7 +49,14 @@ const ViewMap = () => {
 
     //Correct//
 
+    useEffect(()=>{
+        console.log('====================================');
+        console.log(featureLocations);
+        console.log('====================================');
+    },[featureLocations])
+
     const getCurrentLocation = async()=>{
+        setFeatureLocations([])
         const {granted} = await Location.requestForegroundPermissionsAsync();
         if(granted){
             const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
@@ -67,25 +74,27 @@ const ViewMap = () => {
         getCurrentLocation()
         getFeatureLocations()
         
-        socket.on("clearLocations",({id})=>{
-        //    setFeatureLocations([]);
-        // console.log(id);
-        // const locations = featureLocations.filter((location)=>{
-        //     console.log("location id",location.id===id);
-        //     return location.id !== id
-        // });
-        // // console.log("newLocations after delete",locations);
-        // setFeatureLocations(locations);
-        // })
-        getFeatureLocations();
+
+    }, []);
+
+    React.useLayoutEffect(() => {
+        socket.on("clearLocation",({id})=>{
+        console.log(id);
+        const locations = featureLocations.filter((location)=>{
+            console.log("location id",location.id===id);
+            return location.id !== id
+        });
+        // console.log("newLocations after delete",locations);
+        setFeatureLocations(locations);
         })
 
+       
+
         
-        // return () => {
-        //     socket.off("locationAdded");
-        //     socket.off("clearLocations");
-        // }
-    }, []);
+        return () => {
+            socket.off("clearLocation");
+        }
+    }, [featureLocations]);
 
     useEffect(() => {
       socket.on("locationAdded",(data)=>{
@@ -100,14 +109,11 @@ const ViewMap = () => {
         }
         newLocations.push(newData); //rwact useState not working
         console.log("socket new locations",newLocations)
-        setFeatureLocations(newLocations);
+        setFeatureLocations([...newLocations]);
     })
 
-
-    
-
     return ()=>{
-        socket.off("locationAdded");
+       socket.off("locationAdded")
     }
     }, [featureLocations]);
 
@@ -178,18 +184,7 @@ const ViewMap = () => {
 // }, [originRef]);
 
 
-const SeperatorStyle = {
-    height: 1,
-    backgroundColor: '#d1d1d1',
-    width: '80%',
-    alignSelf: 'center',
-    marginBottom: 5,
-    marginTop: 7
-  }
-  
-  const Seperator = () => <View style={SeperatorStyle} />
-
-  return (
+return (
     <View style={tw`flex-1 bg-white`}>
 
 <View style={tw`mt-12 items-center justify-center`}>
