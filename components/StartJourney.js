@@ -9,6 +9,8 @@ import axios from 'axios';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDistanceDuration } from '../util/location';
+import { getNearestpinDistance } from '../util/location';
+import { checkIfThereNearbyPins } from '../util/location';
 import { useState } from 'react';
 
 
@@ -26,6 +28,8 @@ const StartJourney = () => {
   const [user,setUser] = React.useState(null);
   const [distance,setDistance] = useState("")
   const [duration,setDuration] = useState("")
+  const [distance2,setDistance2] = useState("")
+
  const dispatch = useDispatch();
 
   console.log(origin);
@@ -58,6 +62,35 @@ const StartJourney = () => {
   
 
   }, [origin,destination])
+
+  // useEffect(()=>{
+  //   const init = async()=>{
+  //     const data2 = await getNearestpinDistance(origin.location)
+  //     setDistance2(data2.distance2)
+  //     console.log(distance2);
+  //   }
+  //   if(origin)
+  //   init()
+  // })
+
+
+
+  useEffect(() => {
+    const init = async()=>{
+
+      const data2 = await getNearestpinDistance(origin.location)
+      setDistance2(data2.distance2)
+      console.log(distance2);
+
+
+    }
+    if(origin && destination)
+    init()
+  
+
+  })
+
+  
   
 
 
@@ -80,7 +113,7 @@ const StartJourney = () => {
 <View style={styles.boxContain}>
        <View style={styles.boxA}>
         <View style={tw` my-auto mx-auto`}>
-            <Image source={require('../assets/originDestination.png')} style={tw`h-14 w-14 shadow-2xl`} />            
+            <Image source={require('../assets/originDestination.png')} style={tw`h-16 w-16 shadow-2xl justify-center items-center`} />            
             </View>
           </View>
           <View style={styles.boxB}>
@@ -111,13 +144,21 @@ const StartJourney = () => {
           <View style={styles.box1}>
           <View style={tw` my-auto mx-auto pt-4 h-12 items-center `}>
           <TouchableOpacity
-        onPress={() => {navigation.navigate('Features');
-
+        onPress={async() => {navigation.navigate('Features');
+          const userJson = await AsyncStorage.getItem("user")
+          let user;
+          if(userJson){
+            user = JSON.parse(userJson)
+           
+          }
         dispatch(toggleStartClicked())
       axios.post(API_URL+"/originDestination",{
         origin: origin?.description,
         destination: destination?.description,
-        userId: user?.id
+      },{
+        headers:{
+          "Authorization":"Bearer "+user.token
+        }
       })
       }}
         >
@@ -205,12 +246,12 @@ export default StartJourney
    },
    boxA: {
     width: '30%',
-    height: '30%',
+    height: '35%',
     backgroundColor: 'white',
  },
  boxB: {
   width: '70%',
-  height: '30%',
+  height: '40%',
   backgroundColor: 'white',
 },
   
@@ -223,10 +264,11 @@ export default StartJourney
    image:{
   
     width: 50,
-    height: 50,
+    height: 100,
     resizeMode: 'contain',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    alignItems: 'center',
    },
   
    txt:{

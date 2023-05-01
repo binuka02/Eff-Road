@@ -30,8 +30,9 @@ const JourneyHistory = () => {
                 user = JSON.parse(userJson)
             }
             const response = await axios.get(API_URL+"/originDestination",{
-                params:{
-                    userId:user.id
+                headers:{
+                    'Content-Type':'application/json',
+                    "Authorization":"Bearer "+user.token
                 }
             })
             setJourneys(response.data)
