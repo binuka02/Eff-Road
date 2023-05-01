@@ -78,6 +78,7 @@ password: ""
       nv.navigation.navigate("Main")
     } catch (error) {
       console.log(error);
+      console.log(error.response)
       Alert.alert('Incorrect Email or Password!', "The email & password entered doesn't match. Please try again.");
       return;
     }

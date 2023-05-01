@@ -1,4 +1,5 @@
 import {GOOGLE_MAPS_APIKEY} from '@env';
+import { current } from '@reduxjs/toolkit';
 
 export const getAddress = async (lat, lng) => {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_APIKEY}`;
@@ -31,6 +32,44 @@ export const getAddress = async (lat, lng) => {
     const duration = data.rows[0].elements[0].duration.text;
     return {distance,duration};
   }
+
+
+  export const  getNearestpinDistance = async (orgin)=>{
+    const lat = 6.8649
+    const lng = 79.8997
+
+   
+   
+    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?&origins=${orgin.lat},${orgin.lng}&destinations=${lat},${lng}&key=${GOOGLE_MAPS_APIKEY}`;
+    
+    const response = await fetch(url);
+    // console.log(response);
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch distance to nearest pin');
+      
+    }
+    
+    const data2 = await response.json();
+    console.log(data2)
+    const distance2 = data2.rows[0].elements[0].distance.text;
+
+    return {distance2};
+    
+  }
+
+  // export const checkIfThereNearbyPins = async (origin)=>{
+  //   const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin.lat},${origin.lng}&radius=2000&type=point_of_interest&key=${GOOGLE_MAPS_APIKEY}`
+  //   const response = await fetch(url)
+  //   if(!response.ok){
+  //     throw new Error('Failed to fetch nearby pins')
+  //   }
+  //   const data = await response.json();
+  //   const nearbyPins = data?.results?.length
+  //   console.log(nearbyPins)
+  //   return nearbyPins
+  // }
+
 
   export const getNearbyPlace = async(nearbyPlace,location)=>{
     console.log("location",location)

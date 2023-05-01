@@ -8,11 +8,13 @@ import { API_URL } from '@env';
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import Camera from './Camera';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Features = () => {
 
     const navigation = useNavigation();
+
 
     const [mapRegion, setMapRegion] = useState({
         latitude: 6.8649,
@@ -42,6 +44,11 @@ const Features = () => {
     },[])
     
   const userLocation = async (feature) => {
+    const userJson = await AsyncStorage.getItem('user')
+    let user;
+    if(userJson){
+        user = JSON.parse(userJson)
+    }
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -56,6 +63,10 @@ await axios.post(API_URL+"/location",{
     lat: location.coords.latitude,
     lng: location.coords.longitude,
     feature
+},{
+    headers:{
+        'Authorization': 'Bearer '+user.token
+    }
 })
     // if(mapLoaded){
     // setMapRegion({
@@ -79,10 +90,9 @@ await axios.post(API_URL+"/location",{
             <Marker coordinate={mapRegion} />
         </MapView> */}
 
-{openCamera && currentLocation && <Camera currentLocation={currentLocation}/>}
 
         
-        
+
 
         {/* <Button title="Police"  onPress={()=>userLocation("Police")} /> */}
         {/* <Button title="Accident" onPress={()=>userLocation("Accident")} /> */}
@@ -90,7 +100,7 @@ await axios.post(API_URL+"/location",{
         <Text style={tw`mt-2 font-bold text-lg`}>Let Other's Know..</Text> 
 
 
-
+        <View style={styles.boxContainOuter}>
         <View style={styles.boxContain}>
             <View style={styles.box}>
                 <View style={styles.inner}>
@@ -99,13 +109,13 @@ await axios.post(API_URL+"/location",{
                         title="Police"
                         style={tw`items-center `}
                     >    
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                        <View style={tw` w-14 h-14 items-center justify-center rounded-full bg-gray-200 `}>
                             <Image 
                                 source={require("../assets/featureImages/police.png")}
                                 style={tw`w-10 h-10`}
                             />
                         </View>
-                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Police Inspector</Text>
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Police Inspector</Text>
 
                     </TouchableOpacity>            
                 </View>
@@ -117,13 +127,13 @@ await axios.post(API_URL+"/location",{
                         title="Emergency"
                         style={tw`items-center `}
                     >    
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-red-100 `}>
+                        <View style={tw` w-14 h-14 items-center justify-center rounded-full bg-red-100 `}>
                             <Image 
                                 source={require("../assets/featureImages/emergency.png")}
-                                style={tw`w-10 h-10`}
+                                style={tw`w-8 h-8`}
                             />
                         </View>
-                        <Text style={tw`text-sm items-center justify-center font-semibold text-red-600`}>Emergency</Text>
+                        <Text style={tw`text-xs items-center justify-center font-semibold text-red-600`}>Emergency</Text>
 
                     </TouchableOpacity>            
                 </View>
@@ -135,13 +145,13 @@ await axios.post(API_URL+"/location",{
                         title="Accident"
                         style={tw`items-center `}
                     >    
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                        <View style={tw` w-14 h-14 items-center justify-center rounded-full bg-gray-200 `}>
                             <Image 
                                 source={require("../assets/featureImages/accident.png")}
-                                style={tw`w-12 h-12`}
+                                style={tw`w-10 h-10`}
                             />
                         </View>
-                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Accident</Text>
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Accident</Text>
 
                     </TouchableOpacity>            
                 </View>
@@ -153,13 +163,13 @@ await axios.post(API_URL+"/location",{
                         title="RoadClosure"
                         style={tw`items-center `}
                     >    
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                        <View style={tw` w-14 h-14 items-center justify-center rounded-full bg-gray-200 `}>
                             <Image 
                                 source={require("../assets/featureImages/road-closure.png")}
                                 style={tw`w-10 h-10`}
                             />
                         </View>
-                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Road Closure</Text>
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Road Closure</Text>
 
                     </TouchableOpacity>            
                 </View>
@@ -170,13 +180,13 @@ await axios.post(API_URL+"/location",{
                         title="Traffic"
                         style={tw`items-center `}
                     >    
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200 `}>
+                        <View style={tw` w-14 h-14 items-center justify-center rounded-full bg-gray-200 `}>
                             <Image 
                                 source={require("../assets/featureImages/traffic.png")}
                                 style={tw`w-12 h-12`}
                             />
                         </View>
-                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Traffic</Text>
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Traffic</Text>
 
                     </TouchableOpacity>            
                 </View>
@@ -188,17 +198,20 @@ await axios.post(API_URL+"/location",{
                         title="RoadsideHelp"
                         style={tw`items-center `}
                     >    
-                        <View style={tw` w-16 h-16 items-center justify-center rounded-full bg-gray-200`}>
+                        <View style={tw` w-14 h-14 items-center justify-center rounded-full bg-gray-200`}>
                             <Image 
                                 source={require("../assets/featureImages/roadside-help.png")}
                                 style={tw`w-10 h-10`}
                             />
                         </View>
-                        <Text style={tw`text-sm items-center justify-center font-semibold`}>Roadside Help</Text>
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Roadside Help</Text>
 
                     </TouchableOpacity>            
                 </View>
             </View>
+
+
+           
           
         </View>
 
@@ -232,8 +245,17 @@ await axios.post(API_URL+"/location",{
                 </View>
             </View>
         </View>
+        </View>
+
+        <View style={styles.boxContain3}>
+        {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>}
+
+
+        </View>
+        {/* {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>} */}
 
     </View>
+    
 
   )
 }
@@ -248,10 +270,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'row',
+       flexWrap: 'wrap',
     },
     
     boxContain: {
-       width: '80%',
+       width: '100%',
        height: '70%',
        backgroundColor: 'white',
        flexDirection: 'row',
@@ -259,8 +283,23 @@ const styles = StyleSheet.create({
        marginTop: 5,
     },
 
+    boxContainOuter: {
+        width: '70%',
+        height: '95%',
+        backgroundColor: 'white',
+     },
+
+    boxContain3: {
+        width: '25%',
+        height: '80%',
+        backgroundColor: 'white',
+        alignItems: 'center', 
+        justifyContent:'center', 
+        paddingBottom:25
+     },
+
     box: {
-      width: '33.33%',
+      width: '32%',
       height: '40%',
       backgroundColor: 'white',
       marginTop: 10,
@@ -274,12 +313,13 @@ const styles = StyleSheet.create({
    } ,
 
    boxContain2: {
-    width: '80%',
+    width: '95%',
     height: '10%',
     backgroundColor: 'white',
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 5,
+    alignItems: 'center'
  },
 
  box2: {
