@@ -9,11 +9,15 @@ import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import Camera from './Camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
+import { featureLocationsData } from '../slices/navSlice';
+
 
 
 const Features = () => {
 
     const navigation = useNavigation();
+    const featureLocations = useSelector(featureLocationsData)
 
 
     const [mapRegion, setMapRegion] = useState({
@@ -25,15 +29,20 @@ const Features = () => {
 
     const [mapLoaded, setMapLoaded] = useState(false);
     const [currentLocation,setCurrentLocation] = useState(null)
+    const [user,setUser] = useState(null)
 
     const [openCamera,setOpenCamera] = useState(false)
+    const [roadsideHelpClicked,setRoadsideHelpClicked] = useState(false) 
 
     const handleMapLayout = () => {
         setMapLoaded(true);
     };
 
     useEffect(()=>{
+       
         const init = async()=>{
+            const userJson = await AsyncStorage.getItem("user");
+            setUser(JSON.parse(userJson))
             const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
             setCurrentLocation({
                 latitude: location.coords.latitude,
@@ -42,6 +51,16 @@ const Features = () => {
         }
         init()
     },[])
+
+    useEffect(()=>{
+        if(!user) return;
+        setRoadsideHelpClicked(false);
+        featureLocations.forEach((location)=>{
+            if(location.feature==='RoadsideHelp' && location.userId===user.id){
+                setRoadsideHelpClicked(true)
+            }
+        })
+    },[featureLocations,user])
     
   const userLocation = async (feature) => {
     const userJson = await AsyncStorage.getItem('user')
@@ -191,7 +210,7 @@ await axios.post(API_URL+"/location",{
                     </TouchableOpacity>            
                 </View>
             </View>
-            <View style={styles.box}>
+           <View style={styles.box}>
                 <View style={styles.inner}>
                     <TouchableOpacity 
                         onPress={()=>userLocation("RoadsideHelp")}
@@ -204,11 +223,13 @@ await axios.post(API_URL+"/location",{
                                 style={tw`w-10 h-10`}
                             />
                         </View>
-                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Roadside Help</Text>
-
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>
+                           {roadsideHelpClicked ? "Remove":"Roadside Help"}
+                        </Text>
                     </TouchableOpacity>            
                 </View>
             </View>
+            
 
 
            

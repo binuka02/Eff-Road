@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, TouchableOpacity
 import tw from 'tailwind-react-native-classnames';
 import * as Location from 'expo-location';
 import MapView, {Marker} from 'react-native-maps';
-import { useSelector } from 'react-redux';
-import { selectDestination, selectOrigin,selectStartClicked,setOrigin, toggleStartClicked } from '../slices/navSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectDestination, selectOrigin,selectStartClicked,setFeatureLocationsData,setOrigin, toggleStartClicked } from '../slices/navSlice';
 import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useRef } from 'react';
@@ -37,6 +37,7 @@ const Maps = () => {
     const mapRef = useRef(null);
     const originRef = useRef(null);
     const startClicked = useSelector(selectStartClicked)
+    const dispatch = useDispatch();
 
     const [featureLocations,setFeatureLocations] = useState([]);
 
@@ -53,16 +54,18 @@ const Maps = () => {
     useEffect(() => {
         socket.on("locationAdded",(data)=>{
         
-          const newLocations = featureLocations || [];
+          const newLocations = [...featureLocations] || [];
           const newData = {
               id: data.id,
               lat: data.lat,
               lng: data.lng,
-              feature: data.feature
+              feature: data.feature,
+              userId:data.userId,
           }
           newLocations.push(newData); //rwact useState not working
           console.log("socket new locations",newLocations)
           setFeatureLocations(newLocations);
+          dispatch(setFeatureLocationsData(newLocations));
       })
   
       return ()=>{
@@ -81,10 +84,8 @@ const Maps = () => {
         });
         // console.log("newLocations after delete",locations);
         setFeatureLocations(locations);
+        dispatch(setFeatureLocationsData(locations));
         })
-
-       
-
         
         return () => {
             socket.off("clearLocation");
@@ -99,8 +100,8 @@ const Maps = () => {
     async function getFeatureLocations(){
         const response = await axios.get(`${API_URL}/location`);
        setFeatureLocations([])
-        setFeatureLocations(response.data);
-
+        setFeatureLocations(response.data);    
+         dispatch(setFeatureLocationsData(response.data));
     }
 
     async function getLocationPermission(){

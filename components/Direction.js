@@ -34,10 +34,8 @@ const Direction = () => {
   useEffect(() => {
     const init = async()=>{
       const userJson = await AsyncStorage.getItem('user');
-      let user = null;
       if(userJson){
-        user = JSON.parse(userJson);
-        setUser(user);
+        setUser(JSON.parse(userJson));
       }
     }
 
