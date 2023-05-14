@@ -1,20 +1,104 @@
-import { StyleSheet, Text, View, Dimensions, Button,TouchableOpacity,Image } from 'react-native'
+import { StyleSheet, Text, Alert, View, Dimensions, Button,TouchableOpacity,Image } from 'react-native'
 import React from 'react'
 import MapView, {Marker} from 'react-native-maps';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios'
 import { API_URL } from '@env'; 
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
-import Camera from './Camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 import { featureLocationsData } from '../slices/navSlice';
-
-
+import { Camera, CameraType } from 'expo-camera';
 
 const Features = () => {
+
+    //Model Calling
+
+    const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const cameraRef = useRef(null);
+//   const [capturedImage, setCapturedImage] = useState(null);
+
+
+  useEffect(() => {
+    console.log("Camera Opened")
+    // parsedLocation = JSON.parse(currentLocation)
+    async function getPermission() {
+      const { granted } = await Camera.requestCameraPermissionsAsync();
+      if (granted) {
+        requestPermission(granted);
+      }
+    }
+    getPermission();
+    
+  }, []);
+
+
+  const handleCapture = async () => {
+    if (permission) {
+      try {
+        const image = await captureImage();
+                // setCapturedImage(image.uri);
+
+        await sendImageToBackend(image.uri);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to capture or send the image.');
+      }
+    } else {
+      requestPermission();
+    }
+  };
+
+  const captureImage = async () => {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
+      return { uri: photo.uri };
+    }
+    return null;
+  };
+
+
+  const sendImageToBackend = async (imageUri) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'image.jpg',
+      });
+
+      // const response = await axios.post('http://192.168.1.3:5000/detect-road-sign',formData);
+      const response = await fetch(
+        'http://192.168.1.3:5000/detect-road-sign',
+        {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        }
+      )
+
+      const {class_name} = await response.json();
+
+      console.log(class_name)
+
+      // Use text-to-speech library (e.g., react-native-tts) to convert class_name to voice output
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Failed to communicate with the backend.');
+    }
+  };
+
+
+
+
+
+
+
+
 
     const navigation = useNavigation();
     const featureLocations = useSelector(featureLocationsData)
@@ -269,8 +353,16 @@ await axios.post(API_URL+"/location",{
         </View>
 
         <View style={styles.boxContain3}>
-        {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>}
-
+        {/* {capturedImage && <Image source={{ uri: capturedImage }} style={{ width: 200, height: 200 }} />} */}
+            <TouchableOpacity
+            onPress={handleCapture}
+            >
+                <View style={tw`bg-red-400 pl-10 pr-10`}>
+                    <Text></Text>
+                </View>
+            </TouchableOpacity>
+        {openCamera && currentLocation && <Camera style={styles.camera} currentLocation={currentLocation} type={type} ref={cameraRef} useCamera2Api={true}/>}
+    
 
         </View>
         {/* {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>} */}
@@ -294,7 +386,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
        flexWrap: 'wrap',
     },
-    
+    camera: {
+        flex: 1,
+        width: '100%',  
+    },
     boxContain: {
        width: '100%',
        height: '70%',
@@ -316,7 +411,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center', 
         justifyContent:'center', 
-        paddingBottom:25
+        paddingBottom:45
      },
 
     box: {
