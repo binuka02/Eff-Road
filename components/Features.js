@@ -354,18 +354,17 @@ await axios.post(API_URL+"/location",{
 
         <View style={styles.boxContain3}>
         {/* {capturedImage && <Image source={{ uri: capturedImage }} style={{ width: 200, height: 200 }} />} */}
-            <TouchableOpacity
+            
+        {openCamera && currentLocation && <Camera style={styles.camera} currentLocation={currentLocation} type={type} ref={cameraRef} useCamera2Api={true}/>}
+    
+        <TouchableOpacity
             onPress={handleCapture}
             >
-                <View style={tw`bg-white pl-10 pr-10`}>
+                <View style={tw`bg-white pl-12 pr-14 pb-10`}>
                     <Text></Text>
                 </View>
             </TouchableOpacity>
-        {openCamera && currentLocation && <Camera style={styles.camera} currentLocation={currentLocation} type={type} ref={cameraRef} useCamera2Api={true}/>}
-    
-
         </View>
-        {/* {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>} */}
 
     </View>
     
@@ -411,7 +410,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center', 
         justifyContent:'center', 
-        paddingBottom:45
+        // paddingBottom:45
      },
 
     box: {
