@@ -13,13 +13,14 @@ import { Camera, CameraType } from 'expo-camera';
 import * as Speech from 'expo-speech';
 
 const Features = () => {
-  // Model Calling
 
+  // Model Calling
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const cameraRef = useRef(null);
   const [spokenClassName, setSpokenClassName] = useState('');
 
+  //Getting Camera Permission
   useEffect(() => {
     console.log("Camera Opened")
     async function getPermission() {
@@ -31,6 +32,7 @@ const Features = () => {
     getPermission();
   }, []);
 
+  //Handling the detecting road sign image
   const handleCapture = async () => {
     if (permission) {
       try {
@@ -44,6 +46,7 @@ const Features = () => {
     }
   };
 
+  //Capturing the road sign
   const captureImage = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
@@ -52,6 +55,7 @@ const Features = () => {
     return null;
   };
 
+  //Sending captured image to backend
   const sendImageToBackend = async (imageUri) => {
     try {
       const formData = new FormData();
@@ -61,6 +65,7 @@ const Features = () => {
         name: 'image.jpg',
       });
 
+      //API Calling
       const response = await fetch(
         'http://192.168.1.3:5000/detect-road-sign',
         {
@@ -76,6 +81,7 @@ const Features = () => {
 
       console.log(class_name);
 
+      //Voice Output
       setSpokenClassName(class_name);
     } catch (error) {
       console.log(error);
@@ -120,6 +126,7 @@ const Features = () => {
         setMapLoaded(true);
     };
 
+    //Get current location access
     useEffect(()=>{
        
         const init = async()=>{
@@ -134,6 +141,7 @@ const Features = () => {
         init()
     },[])
 
+    //Roadside help pin only can drop once at a time
     useEffect(()=>{
         if(!user) return;
         setRoadsideHelpClicked(false);
@@ -144,6 +152,7 @@ const Features = () => {
         })
     },[featureLocations,user])
     
+    //Get current location and dropping pins
   const userLocation = async (feature) => {
     const userJson = await AsyncStorage.getItem('user')
     let user;
@@ -155,18 +164,21 @@ const Features = () => {
         setErrorMsg('Permission to access location was denied');
         return;
     }
+
     const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
     setCurrentLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
+
     })
+    
 await axios.post(API_URL+"/location",{
     lat: location.coords.latitude,
     lng: location.coords.longitude,
     feature
 },{
     headers:{
-        'Authorization': 'Bearer '+user.token
+        'Authorization': 'Bearer '+user.token //Middleware
     }
 })
     // if(mapLoaded){
@@ -185,21 +197,11 @@ await axios.post(API_URL+"/location",{
     
   return (
     <View style={styles.container}>
-        {/* <MapView style={styles.map}
-        region={mapRegion}
-        onLayout={handleMapLayout}>
-            <Marker coordinate={mapRegion} />
-        </MapView> */}
 
-
+        {/* Situaress Awereness pins panel */}
         
 
-
-        {/* <Button title="Police"  onPress={()=>userLocation("Police")} /> */}
-        {/* <Button title="Accident" onPress={()=>userLocation("Accident")} /> */}
-
         <Text style={tw`mt-2 font-bold text-lg`}>Let Other's Know..</Text> 
-
 
         <View style={styles.boxContainOuter}>
         <View style={styles.boxContain}>
