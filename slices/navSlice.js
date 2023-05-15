@@ -4,7 +4,8 @@ const initialState = {
     origin: null,
     destination: null,
     travelTimeInformation: null,
-    startClicked:false
+    startClicked:false,
+    featureLocationsData:[]
 };
 
 export const navSlice = createSlice({
@@ -23,11 +24,14 @@ export const navSlice = createSlice({
         toggleStartClicked:(state)=>{
             console.log("ssss")
             state.startClicked = !state.startClicked;
+        },
+        setFeatureLocationsData:(state,action)=>{
+            state.featureLocationsData = action.payload;
         }
     },
 });
 
-export const { setOrigin, setDestination, setTravelTimeInformation,toggleStartClicked } = navSlice.actions;
+export const { setOrigin, setDestination, setTravelTimeInformation,toggleStartClicked,setFeatureLocationsData } = navSlice.actions;
 
 
 //Selectors
@@ -35,5 +39,6 @@ export const selectOrigin = (state) => state.nav.origin;
 export const selectDestination = (state) => state.nav.destination;
 export const selectTravelTimeInformation = (state) => state.nav.travelTimeInformation;
 export const selectStartClicked = (state) => state.nav.startClicked;
+export const featureLocationsData = (state)=>state.nav.featureLocationsData;
 
 export default navSlice.reducer;

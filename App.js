@@ -17,7 +17,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 // import {Icons} from 'react-native-ico-material-design';
 import tw from 'tailwind-react-native-classnames';
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 

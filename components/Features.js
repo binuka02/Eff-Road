@@ -1,19 +1,111 @@
-import { StyleSheet, Text, View, Dimensions, Button,TouchableOpacity,Image } from 'react-native'
-import React from 'react'
-import MapView, {Marker} from 'react-native-maps';
-import { useState, useEffect } from 'react';
+import { StyleSheet, Text, Alert, View, Dimensions, Button, TouchableOpacity, Image } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import axios from 'axios'
-import { API_URL } from '@env'; 
+import { API_URL } from '@env';
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
-import Camera from './Camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useSelector } from 'react-redux';
+import { featureLocationsData } from '../slices/navSlice';
+import { Camera, CameraType } from 'expo-camera';
+import * as Speech from 'expo-speech';
 
 const Features = () => {
 
+  // Model Calling
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const cameraRef = useRef(null);
+  const [spokenClassName, setSpokenClassName] = useState('');
+
+  //Getting Camera Permission
+  useEffect(() => {
+    console.log("Camera Opened")
+    async function getPermission() {
+      const { granted } = await Camera.requestCameraPermissionsAsync();
+      if (granted) {
+        requestPermission(granted);
+      }
+    }
+    getPermission();
+  }, []);
+
+  //Handling the detecting road sign image
+  const handleCapture = async () => {
+    if (permission) {
+      try {
+        const image = await captureImage();
+        await sendImageToBackend(image.uri);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to capture or send the image.');
+      }
+    } else {
+      requestPermission();
+    }
+  };
+
+  //Capturing the road sign
+  const captureImage = async () => {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
+      return { uri: photo.uri };
+    }
+    return null;
+  };
+
+  //Sending captured image to backend
+  const sendImageToBackend = async (imageUri) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'image.jpg',
+      });
+
+      //API Calling
+      const response = await fetch(
+        'http://192.168.1.3:5000/detect-road-sign',
+        {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        }
+      )
+
+      const { class_name } = await response.json();
+
+      console.log(class_name);
+
+      //Voice Output
+      setSpokenClassName(class_name);
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Failed to communicate with the backend.');
+    }
+  };
+
+  useEffect(() => {
+    if (spokenClassName) {
+      Speech.speak(spokenClassName);
+    }
+  },)
+
+
+
+
+
+
+
+
+
+
     const navigation = useNavigation();
+    const featureLocations = useSelector(featureLocationsData)
 
 
     const [mapRegion, setMapRegion] = useState({
@@ -25,15 +117,21 @@ const Features = () => {
 
     const [mapLoaded, setMapLoaded] = useState(false);
     const [currentLocation,setCurrentLocation] = useState(null)
+    const [user,setUser] = useState(null)
 
     const [openCamera,setOpenCamera] = useState(false)
+    const [roadsideHelpClicked,setRoadsideHelpClicked] = useState(false) 
 
     const handleMapLayout = () => {
         setMapLoaded(true);
     };
 
+    //Get current location access
     useEffect(()=>{
+       
         const init = async()=>{
+            const userJson = await AsyncStorage.getItem("user");
+            setUser(JSON.parse(userJson))
             const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
             setCurrentLocation({
                 latitude: location.coords.latitude,
@@ -42,7 +140,19 @@ const Features = () => {
         }
         init()
     },[])
+
+    //Roadside help pin only can drop once at a time
+    useEffect(()=>{
+        if(!user) return;
+        setRoadsideHelpClicked(false);
+        featureLocations.forEach((location)=>{
+            if(location.feature==='RoadsideHelp' && location.userId===user.id){
+                setRoadsideHelpClicked(true)
+            }
+        })
+    },[featureLocations,user])
     
+    //Get current location and dropping pins
   const userLocation = async (feature) => {
     const userJson = await AsyncStorage.getItem('user')
     let user;
@@ -54,18 +164,21 @@ const Features = () => {
         setErrorMsg('Permission to access location was denied');
         return;
     }
+
     const location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
     setCurrentLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
+
     })
+    
 await axios.post(API_URL+"/location",{
     lat: location.coords.latitude,
     lng: location.coords.longitude,
     feature
 },{
     headers:{
-        'Authorization': 'Bearer '+user.token
+        'Authorization': 'Bearer '+user.token //Middleware
     }
 })
     // if(mapLoaded){
@@ -84,21 +197,11 @@ await axios.post(API_URL+"/location",{
     
   return (
     <View style={styles.container}>
-        {/* <MapView style={styles.map}
-        region={mapRegion}
-        onLayout={handleMapLayout}>
-            <Marker coordinate={mapRegion} />
-        </MapView> */}
 
-
+        {/* Situaress Awereness pins panel */}
         
 
-
-        {/* <Button title="Police"  onPress={()=>userLocation("Police")} /> */}
-        {/* <Button title="Accident" onPress={()=>userLocation("Accident")} /> */}
-
         <Text style={tw`mt-2 font-bold text-lg`}>Let Other's Know..</Text> 
-
 
         <View style={styles.boxContainOuter}>
         <View style={styles.boxContain}>
@@ -191,7 +294,7 @@ await axios.post(API_URL+"/location",{
                     </TouchableOpacity>            
                 </View>
             </View>
-            <View style={styles.box}>
+           <View style={styles.box}>
                 <View style={styles.inner}>
                     <TouchableOpacity 
                         onPress={()=>userLocation("RoadsideHelp")}
@@ -204,11 +307,13 @@ await axios.post(API_URL+"/location",{
                                 style={tw`w-10 h-10`}
                             />
                         </View>
-                        <Text style={tw`text-xs items-center justify-center font-semibold`}>Roadside Help</Text>
-
+                        <Text style={tw`text-xs items-center justify-center font-semibold`}>
+                           {roadsideHelpClicked ? "Remove":"Roadside Help"}
+                        </Text>
                     </TouchableOpacity>            
                 </View>
             </View>
+            
 
 
            
@@ -248,8 +353,16 @@ await axios.post(API_URL+"/location",{
         </View>
 
         <View style={styles.boxContain3}>
-        {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>}
-
+        {/* {capturedImage && <Image source={{ uri: capturedImage }} style={{ width: 200, height: 200 }} />} */}
+            <TouchableOpacity
+            onPress={handleCapture}
+            >
+                <View style={tw`bg-white pl-10 pr-10`}>
+                    <Text></Text>
+                </View>
+            </TouchableOpacity>
+        {openCamera && currentLocation && <Camera style={styles.camera} currentLocation={currentLocation} type={type} ref={cameraRef} useCamera2Api={true}/>}
+    
 
         </View>
         {/* {openCamera && currentLocation && <Camera currentLocation={currentLocation}/>} */}
@@ -273,7 +386,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
        flexWrap: 'wrap',
     },
-    
+    camera: {
+        flex: 1,
+        width: '100%',  
+    },
     boxContain: {
        width: '100%',
        height: '70%',
@@ -295,7 +411,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center', 
         justifyContent:'center', 
-        paddingBottom:25
+        paddingBottom:45
      },
 
     box: {
