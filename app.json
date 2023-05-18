@@ -4,11 +4,11 @@
     "slug": "Final-Project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appicon.jpg",
+    "icon": "./assets/appicon.png",
     "jsEngine": "hermes",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo.jpg",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/appicon.jpg",
+        "foregroundImage": "./assets/appicon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
