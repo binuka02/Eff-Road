@@ -1,6 +1,6 @@
 
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity } from "react-native";
-import React, {useLayoutEffect} from "react";
+import React, {useEffect, useLayoutEffect, useRef} from "react";
 import tw from "tailwind-react-native-classnames";
 import NavOptions from "../components/NavOptions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -10,7 +10,17 @@ import { useDispatch } from "react-redux";
 import { ScrollView } from "react-navigation";
 // import * as Animatable from 'react-native-animatable';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+
+    const autoCompleteRef = useRef()
+
+    useEffect(()=>{
+        const unsubscribe = navigation.addListener('focus',()=>{
+            autoCompleteRef.current?.setAddressText("")
+        })
+      
+        return unsubscribe;
+    },[])
 
     const dispatch = useDispatch();
     return (
@@ -34,6 +44,7 @@ const HomeScreen = () => {
             <View>
             <GooglePlacesAutocomplete
                     placeholder="Tell me where to go"
+                    ref={autoCompleteRef}
                     styles={{
                         container:{
                             flex:0,

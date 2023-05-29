@@ -20,7 +20,7 @@ const SeperatorStyle = {
   
   const Seperator = () => <View style={SeperatorStyle} />
 
-const JourneyHistory = () => {
+const JourneyHistory = ({navigation}) => {
     const [journeys,setJourneys] = useState([])
     useEffect(()=>{
         const getJourneys = async()=>{
@@ -28,6 +28,7 @@ const JourneyHistory = () => {
             let user = null
             if(userJson){
                 user = JSON.parse(userJson)
+                console.log(user)
             }
             const response = await axios.get(API_URL+"/originDestination",{
                 headers:{
@@ -38,6 +39,12 @@ const JourneyHistory = () => {
             setJourneys(response.data)
         }
         getJourneys()
+
+        const unsubscribe = navigation.addListener('focus',()=>{
+            getJourneys();
+        })
+
+        return unsubscribe;
 
     },[])
   return (

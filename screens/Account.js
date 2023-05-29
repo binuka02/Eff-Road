@@ -69,10 +69,18 @@ export default function Account({navigation}){
   const [user,setUser] = useState(null)
 
   useEffect(()=>{
-    AsyncStorage.getItem('user').then((user)=>{
-      setUser(JSON.parse(user))
-      setState({...state,...JSON.parse(user),password:""})
-    })
+    setUser(null)
+    const init =async()=>{
+      const userJson = await AsyncStorage.getItem('user');
+      setUser(JSON.parse(userJson))
+      setState({...state,...JSON.parse(userJson),password:""})
+    }
+    init()
+    const unsubscribe = navigation.addListener('focus',()=>{
+      init();
+  })
+
+  return unsubscribe;
   },[])
 
 const [visible, setVisible] = useState(false);
