@@ -62,7 +62,7 @@ const Features = () => {
       });
 
       const response = await fetch(
-        'http://192.168.1.3:5000/detect-road-sign',
+        'http://192.168.1.101:5000/detect-road-sign',
         {
           method: 'POST',
           body: formData,
