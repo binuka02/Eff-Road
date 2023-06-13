@@ -10,7 +10,7 @@ To provide a comprehensive road condition management experience, EffRoad include
 
 EffRoad is a powerful mobile application powered by React Native that empowers drivers with real-time road condition updates, road sign detection, and easy access to emergency services. Its intuitive interface, advanced features, and community-driven approach set it apart from traditional navigation apps.
 
-Mobile App : exp://u.expo.dev/update/e6e3b340-04d4-4137-9150-5c9e861586e6 
+Mobile App : exp://u.expo.dev/update/e6e3b340-04d4-4137-9150-5c9e861586e6   
 Web App : https://eff-road.netlify.app/
 
 ![](https://github.com/binuka02/Eff-Road/assets/76623940/827a3704-580a-406b-bf85-dba6d19aa4b8)
